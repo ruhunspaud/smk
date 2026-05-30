@@ -1,0 +1,2844 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klinik Bidan Sehat — Sistem Online</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g:#16a34a;--gd:#15803d;--gl:#dcfce7;--gm:#86efac;
+  --p:#7c3aed;--pl:#ede9fe;--pm:#a78bfa;
+  --am:#d97706;--al:#fef3c7;
+  --re:#dc2626;--rl:#fee2e2;
+  --bl:#2563eb;--bll:#dbeafe;s
+  --tx:#111827;--t2:#6b7280;--t3:#9ca3af;
+  --bg:#f3f4f6;--bg2:#ffffff;--bd:#e5e7eb;--bd2:#d1d5db;
+  --r:8px;--rl2:12px;--rl3:16px;
+  --sh:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.05);
+  --shm:0 8px 30px rgba(0,0,0,.12);
+}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--tx);font-size:13px;line-height:1.5;min-height:100vh}
+
+/* ==================== LOGIN ==================== */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f0fdf4 0%,#ede9fe 60%,#dbeafe 100%);padding:16px}
+.lcard{background:#fff;border-radius:20px;padding:36px 32px;width:420px;max-width:100%;box-shadow:var(--shm),0 0 0 1px rgba(0,0,0,.04)}
+.llogo{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.llogo-icon{width:46px;height:46px;background:var(--g);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.llogo-icon svg{width:24px;height:24px}
+.llogo-t{font-size:18px;font-weight:700}
+.llogo-s{font-size:12px;color:var(--t2);margin-top:2px}
+.rtabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg);border-radius:var(--r);padding:4px;margin-bottom:20px}
+.rtab{padding:9px;text-align:center;cursor:pointer;border-radius:6px;font-size:12px;font-weight:600;color:var(--t2);transition:.15s;user-select:none;border:1px solid transparent}
+.rtab.act{background:#fff;color:var(--tx);box-shadow:var(--sh);border-color:var(--bd)}
+.lfg{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.lfg label{font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.07em}
+.lfg input{border:1px solid var(--bd2);border-radius:var(--r);padding:10px 12px;font-size:13px;font-family:inherit;color:var(--tx);transition:.15s;width:100%}
+.lfg input:focus{outline:none;border-color:var(--g);box-shadow:0 0 0 3px rgba(22,163,74,.12)}
+.lbtn{width:100%;padding:12px;background:var(--g);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s;letter-spacing:.01em}
+.lbtn:hover{background:var(--gd);transform:translateY(-1px)}
+.lbtn:active{transform:translateY(0)}
+.lerr{background:var(--rl);border:1px solid #fca5a5;color:var(--re);border-radius:var(--r);padding:9px 12px;font-size:12px;margin-bottom:12px;display:none;font-weight:500}
+.demo-box{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);padding:12px 14px;margin-top:16px}
+.demo-box p{font-size:11px;color:var(--t2);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.demo-box code{font-family:'DM Mono',monospace;background:#fff;border:1px solid var(--bd);padding:2px 6px;border-radius:4px;font-size:11px;color:var(--tx)}
+.lsync{text-align:center;font-size:11px;color:var(--t3);margin-top:14px;display:flex;align-items:center;justify-content:center;gap:6px}
+.spin-sm{width:12px;height:12px;border:1.5px solid var(--bd2);border-top-color:var(--g);border-radius:50%;animation:spin .7s linear infinite}
+
+/* ==================== APP ==================== */
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+.sb{width:218px;background:#fff;border-right:1px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sb-head{padding:14px 14px 12px;border-bottom:1px solid var(--bd)}
+.sb-logo-row{display:flex;align-items:center;gap:9px}
+.sb-licon{width:30px;height:30px;background:var(--g);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-licon svg{width:16px;height:16px}
+.sb-lt{font-size:12.5px;font-weight:700;line-height:1.3}
+.sb-ls{font-size:9px;color:var(--t3);margin-top:3px;font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.sb-nav{flex:1;padding:6px 8px}
+.ns{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:10px 8px 3px}
+.ni{display:flex;align-items:center;gap:9px;padding:7px 10px;cursor:pointer;font-size:12.5px;color:var(--t2);border-radius:var(--r);transition:.12s;user-select:none;margin-bottom:1px}
+.ni:hover{background:var(--bg);color:var(--tx)}
+.ni.act{background:var(--gl);color:var(--gd);font-weight:700}
+.ni svg{width:14px;height:14px;flex-shrink:0;stroke-width:1.8}
+.nbadge{margin-left:auto;background:var(--re);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;display:none}
+.sb-foot{border-top:1px solid var(--bd);padding:10px 12px}
+.uchip{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.av.owner{background:var(--pl);color:var(--p)}
+.av.pegawai{background:var(--gl);color:var(--gd)}
+.uc-name{font-size:11.5px;font-weight:700}
+.uc-role{font-size:10px;color:var(--t3)}
+.sync-row{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--t3);margin-bottom:6px}
+.sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.sdot.online{background:var(--g)}
+.sdot.syncing{background:var(--am);animation:pulse 1s infinite}
+.sdot.offline{background:var(--re)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.logout-btn{width:100%;padding:7px;background:var(--rl);border:1px solid #fca5a5;color:var(--re);border-radius:var(--r);font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;transition:.12s}
+.logout-btn:hover{background:#fecaca}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:#fff;border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.topbar h1{font-size:14px;font-weight:700}
+.topbar-r{display:flex;align-items:center;gap:8px}
+.ct{flex:1;overflow-y:auto;padding:16px 20px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;font-size:12px;border-radius:var(--r);cursor:pointer;border:1px solid var(--bd2);background:#fff;color:var(--tx);font-family:inherit;font-weight:600;transition:.12s;white-space:nowrap;line-height:1}
+.btn:hover{background:var(--bg)}
+.btn.p{background:var(--g);border-color:var(--g);color:#fff}
+.btn.p:hover{background:var(--gd)}
+.btn.pp{background:var(--p);border-color:var(--p);color:#fff}
+.btn.pp:hover{background:#6d28d9}
+.btn.d{background:var(--rl);border-color:#fca5a5;color:var(--re)}
+.btn.sm{padding:4px 9px;font-size:11px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* STAT GRID */
+.sgrid{display:grid;gap:10px;margin-bottom:14px}
+.sc{background:#fff;border:1px solid var(--bd);border-radius:var(--rl2);padding:12px 14px;box-shadow:var(--sh)}
+.sc.g{background:var(--g);border-color:var(--g)}
+.sc.p{background:var(--p);border-color:var(--p)}
+.sc.g .sl,.sc.g .ss,.sc.p .sl,.sc.p .ss{color:rgba(255,255,255,.7)}
+.sc.g .sv,.sc.p .sv{color:#fff}
+.sl{font-size:9.5px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.sv{font-size:22px;font-weight:700;line-height:1}
+.ss{font-size:10px;color:var(--t3);margin-top:3px}
+
+/* SECTION */
+.sec{background:#fff;border:1px solid var(--bd);border-radius:var(--rl2);padding:14px;margin-bottom:12px;box-shadow:var(--sh)}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.sh h3{font-size:13px;font-weight:700}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse}
+th{font-size:9.5px;font-weight:700;color:var(--t3);text-align:left;padding:6px 8px;border-bottom:1px solid var(--bd);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+td{font-size:12px;padding:8px;border-bottom:1px solid #f3f4f6;color:var(--tx);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafafa}
+.tbl-wrap{overflow-x:auto}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.bg2{background:var(--gl);color:var(--gd)}
+.ba2{background:var(--al);color:var(--am)}
+.br2{background:var(--rl);color:var(--re)}
+.bb2{background:var(--bll);color:var(--bl)}
+.bp2{background:var(--pl);color:var(--p)}
+.bgy{background:#f3f4f6;color:var(--t2)}
+
+/* FORM */
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.fg{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.fg label{font-size:9.5px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.07em}
+.fg input,.fg select,.fg textarea{border:1px solid var(--bd2);border-radius:var(--r);padding:8px 10px;font-size:12.5px;background:#fff;color:var(--tx);font-family:inherit;width:100%;transition:.12s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--g);box-shadow:0 0 0 3px rgba(22,163,74,.1)}
+.fg textarea{resize:none;height:60px}
+.fg input:disabled,.fg select:disabled{background:var(--bg);color:var(--t3)}
+
+/* MODAL */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;padding:16px}
+.ov.open{display:flex}
+.modal{background:#fff;border-radius:var(--rl3);padding:22px;width:520px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.2)}
+.modal h3{font-size:14px;font-weight:700;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--bd)}
+.mact{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;padding-top:12px;border-top:1px solid var(--bd)}
+
+/* SEARCH */
+.sw{position:relative;display:inline-block}
+.sw input{padding:7px 10px 7px 30px;border:1px solid var(--bd2);border-radius:var(--r);font-size:12px;background:var(--bg);font-family:inherit;width:190px;color:var(--tx)}
+.sw input:focus{outline:none;border-color:var(--g);background:#fff}
+.sw svg{position:absolute;left:8px;top:50%;transform:translateY(-50%);opacity:.4;pointer-events:none;width:13px;height:13px}
+
+/* ALERT */
+.alert{display:flex;align-items:flex-start;gap:8px;padding:10px 14px;border-radius:var(--r);font-size:12px;margin-bottom:12px;border:1px solid;font-weight:500}
+.aw{background:var(--al);border-color:#fcd34d;color:#92400e}
+.ai{background:var(--bll);border-color:#93c5fd;color:#1e40af}
+
+/* SBAR */
+.sbar{height:4px;border-radius:2px;background:#e5e7eb;margin-top:4px;overflow:hidden}
+.sfill{height:100%;border-radius:2px;transition:width .3s}
+
+/* QUEUE ITEM */
+.qi{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--bd);border-radius:var(--r);margin-bottom:8px;transition:.12s}
+.qi:hover{border-color:var(--gm);background:#fafffe}
+.qnum{width:32px;height:32px;border-radius:50%;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--gd);flex-shrink:0}
+
+/* OWNER BANNER */
+.ob{background:linear-gradient(135deg,#7c3aed 0%,#2563eb 100%);border-radius:var(--rl2);padding:18px 22px;color:#fff;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+
+/* BIDAN CARD */
+.bc{border:1px solid var(--bd);border-radius:var(--rl2);padding:14px;display:flex;gap:12px;background:#fff;transition:.12s}
+.bc:hover{border-color:var(--gm);box-shadow:var(--sh)}
+
+/* RESEP */
+.resep-doc{font-family:'DM Mono',monospace;font-size:11.5px;line-height:1.8;color:#111;padding:20px;border:1px solid #d1d5db;border-radius:8px;background:#fff}
+
+/* LOCKED PAGE */
+.locked{text-align:center;padding:60px 24px;color:var(--t3)}
+.locked svg{width:52px;height:52px;margin:0 auto 16px;display:block;opacity:.25;stroke:var(--t3)}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--bd);margin-bottom:14px}
+.tab{padding:7px 16px;cursor:pointer;font-size:12px;color:var(--t3);border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:600;transition:.12s}
+.tab.act{color:var(--gd);border-bottom-color:var(--g)}
+
+/* NOTIFICATION */
+.notif{position:fixed;bottom:20px;right:20px;background:#1f2937;color:#fff;padding:10px 16px;border-radius:var(--r);font-size:12px;font-weight:600;z-index:9999;box-shadow:var(--shm);transform:translateY(80px);opacity:0;transition:.3s;max-width:300px}
+.notif.show{transform:translateY(0);opacity:1}
+
+/* ROLE BANNER */
+.role-banner{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--r);font-size:12px;font-weight:500;margin-bottom:12px}
+.rb-owner{background:var(--pl);border:1px solid var(--pm);color:var(--p)}
+.rb-peg{background:var(--gl);border:1px solid var(--gm);color:var(--gd)}
+
+/* PRINT */
+@media print{
+  .sb,.topbar,.no-print,.ov{display:none!important}
+  .app,.main{overflow:visible;height:auto;display:block}
+  .ct{overflow:visible;padding:0}
+  body{background:#fff}
+  *{box-shadow:none!important}
+}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+
+</style>
+</head>
+<body>
+
+<!-- ==================== NOTIFICATION ==================== -->
+<div id="notif" class="notif"></div>
+
+<!-- ==================== LOGIN ==================== -->
+<div id="login-screen">
+  <div class="lcard">
+    <div class="llogo">
+      <div class="llogo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+      </div>
+      <div>
+        <div class="llogo-t">Klinik <span id="display-nama-owner-login">Bidan Sehat</span></div>
+        <div class="llogo-s">Sistem Manajemen Klinik</div>
+      </div>
+    </div>
+    <div class="rtabs">
+      <div class="rtab act" id="rt-owner" onclick="setRole('owner')">👑 Owner / Pemilik</div>
+      <div class="rtab" id="rt-peg" onclick="setRole('pegawai')">🩺 Pegawai / Bidan</div>
+    </div>
+    <div id="lerr" class="lerr"></div>
+    <div class="lfg">
+      <label>Username</label>
+      <input id="l-user" type="text" placeholder="Masukkan username" autocomplete="username">
+    </div>
+    <div class="lfg">
+      <label>Password</label>
+      <input id="l-pass" type="password" placeholder="Masukkan password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div style="margin-bottom:15px; padding:10px; background:var(--bg); border-radius:var(--r); text-align:center; border:1px solid var(--bd)">
+  <div style="font-size:10px; color:var(--t2); font-weight:700; text-transform:uppercase">Status Lisensi</div>
+  <div id="info-expired-login" style="font-size:13px; font-weight:700; color:var(--tx)">
+    Sampai: <span id="display-tgl-lisensi">Memuat...</span>
+  </div>
+</div>
+	
+	<button class="lbtn" id="lbtn" onclick="doLogin()">Masuk ke Sistem</button>
+    <div class="demo-box">
+      <p>Akun Demo</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">
+        <div style="font-size:11px;color:var(--t2)">
+          <strong style="color:var(--p)">👑 Owner</strong><br>
+          User: <code>owner</code><br>
+          Pass: <code>owner123</code>
+        </div>
+        <div style="font-size:11px;color:var(--t2)">
+          <strong style="color:var(--g)">🩺 Pegawai</strong><br>
+          User: <code>bidan1</code><br>
+          Pass: <code>bidan123</code>
+        </div>
+      </div>
+    </div>
+    <div class="lsync" id="lsync"><div class="spin-sm"></div> Memuat data dari cloud...</div>
+  </div>
+</div>
+
+<!-- ==================== APP ==================== -->
+<div id="app-shell" class="app" style="display:none">
+  <div class="sb">
+    <div class="sb-head">
+      <div class="sb-logo-row">
+        <div class="sb-licon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+        <div><div class="sb-lt">Klinik Bidan<br>Sehat</div></div>
+      </div>
+      <div class="sb-ls" id="sb-sub">v2.0 Online</div>
+    </div>
+    <div class="sb-nav" id="sb-nav"></div>
+    <div class="sb-foot">
+      <div class="uchip">
+        <div class="av" id="av-el"></div>
+        <div>
+          <div class="uc-name" id="av-name"></div>
+          <div class="uc-role" id="av-role"></div>
+        </div>
+      </div>
+      <div class="sync-row">
+        <div class="sdot" id="sdot"></div>
+        <span id="sync-txt">Online</span>
+        <button class="btn sm" style="margin-left:auto;padding:2px 7px;font-size:10px" onclick="doSync()">↻</button>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">⏻ Keluar</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <h1 id="ptitle">Dashboard</h1>
+      <div class="topbar-r">
+        <span style="font-size:11px;color:var(--t3)" id="clock-el"></span>
+        <span style="font-size:11px;color:var(--t3)" id="date-el"></span>
+      </div>
+    </div>
+    <div class="ct" id="ct"></div>
+  </div>
+</div>
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- DAFTAR -->
+<div class="ov" id="m-daftar">
+  <div class="modal" style="width:540px">
+    <h3>Pendaftaran Pasien</h3>
+    <div class="tabs">
+      <div class="tab act" id="dt-baru" onclick="swDaftar('baru')">Pasien Baru</div>
+      <div class="tab" id="dt-lama" onclick="swDaftar('lama')">Pasien Lama</div>
+    </div>
+    <div id="reg-baru">
+      <div class="fr">
+        <div class="fg"><label>Nama Lengkap *</label><input id="dn-nama" placeholder="Nama pasien"></div>
+        <div class="fg"><label>NIK</label><input id="dn-nik" placeholder="16 digit NIK" maxlength="16"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Tanggal Lahir</label><input type="date" id="dn-tgl"></div>
+        <div class="fg"><label>No. HP</label><input id="dn-hp" placeholder="08xx"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Gol. Darah</label><select id="dn-gol"><option>A</option><option>B</option><option>AB</option><option>O</option><option>Tidak Tahu</option></select></div>
+        <div class="fg"><label>Jaminan</label><select id="dn-jam"><option>Umum</option><option>BPJS</option><option>Asuransi Swasta</option></select></div>
+      </div>
+      <div class="fg"><label>Alamat</label><textarea id="dn-alamat"></textarea></div>
+    </div>
+    <div id="reg-lama" style="display:none">
+      <div class="fg"><label>Cari Nama / NIK</label><input id="dl-cari" oninput="cariReg(this.value)" placeholder="Ketik nama atau NIK..."></div>
+      <div id="dl-res" style="max-height:190px;overflow-y:auto;margin-bottom:8px"></div>
+      <input type="hidden" id="dl-pid">
+    </div>
+    <hr style="border:none;border-top:1px solid var(--bd);margin:4px 0 12px">
+    <div class="fr">
+      <div class="fg"><label>Layanan *</label><select id="d-layanan">
+        <option>ANC (Kehamilan)</option><option>PNC (Nifas)</option><option>KB</option>
+        <option>Imunisasi</option><option>Persalinan Normal</option><option>Pemeriksaan Umum</option><option>Lainnya</option>
+      </select></div>
+      <div class="fg"><label>Bidan Pemeriksa</label><select id="d-bidan"></select></div>
+    </div>
+    <div class="fg"><label>Keluhan Utama</label><input id="d-keluhan" placeholder="Keluhan saat datang"></div>
+    <div class="mact">
+      <button class="btn" onclick="closeM('m-daftar')">Batal</button>
+      <button class="btn p" onclick="saveDaftar()">✓ Masuk Antrian</button>
+    </div>
+  </div>
+</div>
+
+<!-- PERIKSA -->
+<div class="ov" id="m-periksa">
+  <div class="modal" style="width:580px">
+    <h3 id="mp-t">Pemeriksaan</h3>
+    <input type="hidden" id="pr-aid">
+    <div class="fr3">
+      <div class="fg"><label>BB (kg)</label><input type="number" id="pr-bb" step=".1" placeholder="60"></div>
+      <div class="fg"><label>TB (cm)</label><input type="number" id="pr-tb" placeholder="160"></div>
+      <div class="fg"><label>Suhu (°C)</label><input type="number" id="pr-suhu" step=".1" placeholder="36.5"></div>
+    </div>
+    <div class="fr3">
+      <div class="fg"><label>Tekanan Darah</label><input id="pr-td" placeholder="120/80 mmHg"></div>
+      <div class="fg"><label>Nadi (/mnt)</label><input type="number" id="pr-nadi" placeholder="80"></div>
+      <div class="fg"><label>UK (jika hamil)</label><input id="pr-uk" placeholder="28 minggu"></div>
+    </div>
+    <div class="fg"><label>Diagnosa / Catatan</label><textarea id="pr-cat" style="height:56px"></textarea></div>
+    <div class="fg"><label>Tindakan</label><textarea id="pr-tind" style="height:44px" placeholder="Tindakan yang dilakukan..."></textarea></div>
+	<!-- TAMBAHKAN BARIS DI BAWAH INI -->
+	
+	
+	<div style="background:#f8fafc; padding:12px; border-radius:var(--r); margin-top:12px; display:flex; justify-content:space-between; align-items:center; border:1px dashed #94a3b8;">
+		<span style="font-size:11px; font-weight:700; color:var(--t2); text-transform:uppercase; letter-spacing:.05em">Estimasi Total Biaya:</span>
+		<span id="pr-total-estimasi" style="font-size:18px; font-weight:700; color:var(--p);">Rp0</span>
+	</div>
+
+	<div class="fg" style="margin-top:10px">
+		<label>Pengajuan Diskon Khusus (Rp)</label>
+		<input type="number" id="pr-diskon" placeholder="Nominal diskon (butuh ACC Owner)" oninput="hitungEstimasiBiaya()">
+	</div>
+	
+	
+    <div style="border-top:1px solid var(--bd);padding-top:12px;margin-top:2px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <p style="font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.07em">Resep Obat</p>
+        <button class="btn sm" onclick="addResepRow()">+ Tambah Obat</button>
+      </div>
+      <div id="resep-rows"></div>
+    </div>
+    <div class="mact">
+      <button class="btn" onclick="closeM('m-periksa')">Batal</button>
+      <button class="btn" onclick="cetakDari('periksa')">🖨 Preview Resep</button>
+      <button class="btn p" onclick="savePeriksa()">✓ Simpan Pemeriksaan</button>
+    </div>
+  </div>
+</div>
+
+<!-- PASIEN -->
+<div class="ov" id="m-pasien">
+  <div class="modal">
+    <h3 id="mp2-t">Tambah Pasien</h3>
+    <input type="hidden" id="p-eid">
+    <div class="fr">
+      <div class="fg"><label>Nama Lengkap *</label><input id="p-nama"></div>
+      <div class="fg"><label>NIK</label><input id="p-nik" maxlength="16"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Tanggal Lahir</label><input type="date" id="p-tgl"></div>
+      <div class="fg"><label>No. HP</label><input id="p-hp"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Gol. Darah</label><select id="p-gol"><option>A</option><option>B</option><option>AB</option><option>O</option><option>Tidak Tahu</option></select></div>
+      <div class="fg"><label>Jaminan</label><select id="p-jam"><option>Umum</option><option>BPJS</option><option>Asuransi Swasta</option></select></div>
+    </div>
+    <div class="fg"><label>Alamat Lengkap</label><textarea id="p-alamat"></textarea></div>
+    <div class="mact">
+      <button class="btn" onclick="closeM('m-pasien')">Batal</button>
+      <button class="btn p" onclick="savePasien()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- OBAT -->
+<div class="ov" id="m-obat">
+  <div class="modal">
+    <h3 id="mo-t">Tambah Obat</h3>
+    <input type="hidden" id="o-eid">
+    <div class="fr">
+      <div class="fg"><label>Nama Obat *</label><input id="o-nama"></div>
+      <div class="fg"><label>Kategori</label><select id="o-kat">
+        <option>Vitamin & Suplemen</option><option>Antibiotik</option><option>Analgesik</option>
+        <option>Antiemetik</option><option>Antihipertensi</option><option>Oksitosin/Ergot</option><option>Antiseptik</option><option>Lainnya</option>
+      </select></div>
+    </div>
+    <div class="fr3">
+      <div class="fg"><label>Stok Awal</label><input type="number" id="o-stok" placeholder="0"></div>
+      <div class="fg"><label>Stok Minimum</label><input type="number" id="o-min" placeholder="10"></div>
+      <div class="fg"><label>Satuan</label><select id="o-sat"><option>Tablet</option><option>Kapsul</option><option>Ampul</option><option>Botol</option><option>Sachet</option><option>Vial</option><option>Strip</option></select></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Exp. Date</label><input type="date" id="o-exp"></div>
+      <div class="fg"><label>Produsen</label><input id="o-prod" placeholder="Nama produsen"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Harga Beli (Rp)</label><input type="number" id="o-hb" placeholder="0"></div>
+      <div class="fg"><label>Harga Jual (Rp)</label><input type="number" id="o-hj" placeholder="0"></div>
+    </div>
+    <div class="mact">
+      <button class="btn" onclick="closeM('m-obat')">Batal</button>
+      <button class="btn p" onclick="saveObat()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- STOK -->
+<div class="ov" id="m-stok">
+  <div class="modal" style="width:380px">
+    <h3>Tambah Stok Obat</h3>
+    <input type="hidden" id="st-id">
+    <div style="background:var(--bg);border-radius:var(--r);padding:10px 12px;margin-bottom:12px;font-size:12.5px;font-weight:600" id="st-info"></div>
+    <div class="fr">
+      <div class="fg"><label>Jumlah Masuk *</label><input type="number" id="st-jml" placeholder="0" min="1"></div>
+      <div class="fg"><label>Exp. Date</label><input type="date" id="st-exp"></div>
+    </div>
+    <div class="fg"><label>Harga Beli Baru (Rp)</label><input type="number" id="st-hb" placeholder="Kosongkan jika sama"></div>
+    <div class="fg"><label>Keterangan</label><input id="st-ket" placeholder="Sumber restok, nomor faktur..."></div>
+    <div class="mact">
+      <button class="btn" onclick="closeM('m-stok')">Batal</button>
+      <button class="btn p" onclick="saveStok()">✓ Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- PEGAWAI -->
+<div class="ov" id="m-bidan">
+  <div class="modal">
+    <h3 id="mb-t">Tambah Pegawai</h3>
+    <input type="hidden" id="b-eid">
+    <div class="fr">
+      <div class="fg"><label>Nama Lengkap *</label><input id="b-nama" placeholder="Nama dengan gelar"></div>
+      <div class="fg"><label>Username Login *</label><input id="b-user" placeholder="Unik, tanpa spasi"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>No. STR</label><input id="b-str" placeholder="Nomor STR bidan"></div>
+      <div class="fg"><label>No. HP</label><input id="b-hp" placeholder="08xx"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Jabatan</label><select id="b-jab"><option>Bidan Pelaksana</option><option>Bidan Senior</option><option>Kepala Bidan</option><option>Bidan Magang</option></select></div>
+      <div class="fg"><label>Status</label><select id="b-status"><option>Aktif</option><option>Cuti</option><option>Tidak Aktif</option></select></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Hari Praktik</label><input id="b-hari" placeholder="Senin–Jumat"></div>
+      <div class="fg"><label>Jam Praktik</label><input id="b-jam" placeholder="08:00–14:00"></div>
+    </div>
+    <div class="fg"><label>Password *</label><input type="password" id="b-pass" placeholder="Password login pegawai (min. 6 karakter)"></div>
+    <div class="fg"><label>Catatan</label><textarea id="b-cat" style="height:44px"></textarea></div>
+    <div class="mact">
+      <button class="btn" onclick="closeM('m-bidan')">Batal</button>
+      <button class="btn p" onclick="saveBidan()">✓ Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESEP -->
+<div class="ov" id="m-resep">
+  <div class="modal" style="width:570px">
+    <h3 class="no-print">🖨 Preview Resep</h3>
+    <div id="resep-content" class="resep-doc" style="margin-bottom:14px"></div>
+    <div class="mact no-print">
+      <button class="btn" onclick="closeM('m-resep')">Tutup</button>
+      <button class="btn p" onclick="printResep()">Cetak / Save PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- RIWAYAT -->
+<div class="ov" id="m-riwayat">
+  <div class="modal" style="width:640px">
+    <h3 id="mr-t">Riwayat Kunjungan</h3>
+    <div id="mr-content"></div>
+    <div class="mact"><button class="btn p" onclick="closeM('m-riwayat')">Tutup</button></div>
+  </div>
+</div>
+
+<!-- GANTI PASSWORD -->
+<div class="ov" id="m-chpass">
+  <div class="modal" style="width:380px">
+    <h3>Ganti Password</h3>
+    <input type="hidden" id="cp-uid">
+    <div class="fg"><label>Password Lama</label><input type="password" id="cp-old" placeholder="Password saat ini"></div>
+    <div class="fg"><label>Password Baru</label><input type="password" id="cp-new" placeholder="Min. 6 karakter"></div>
+    <div class="fg"><label>Konfirmasi Password Baru</label><input type="password" id="cp-conf" placeholder="Ulangi password baru"></div>
+    <div class="mact">
+      <button class="btn" onclick="closeM('m-chpass')">Batal</button>
+      <button class="btn p" onclick="saveChPass()">✓ Ganti Password</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// --- TARUH DI SINI (SEBELUM KODE LAIN) ---
+function getMasaAktifOwner() {
+    const storageKey = 'klinikbidan_users_v4'; // Kunci database Anda 
+    try {
+        const storageData = localStorage.getItem(storageKey);
+        if (storageData) {
+            const data = JSON.parse(storageData);
+            const owner = data.find(u => u.role === 'owner');
+            return owner ? owner.masaAktif : '2026-05-01'; // Default jika tidak ada 
+        }
+    } catch (e) {
+        console.error("Gagal membaca storage", e);
+    }
+    return '2026-05-01'; 
+}
+
+// Tambahkan kode ini agar saat halaman selesai dimuat, tanggal langsung terisi
+window.addEventListener('load', () => {
+    // A. UPDATE NAMA KLINIK (Sudah ada)
+    try {
+        const storageDB = localStorage.getItem('klinikbidan_v4');
+        if (storageDB) {
+            const dbData = JSON.parse(storageDB);
+            if (dbData.info && dbData.info.nama) {
+                document.getElementById('display-nama-klinik-login').textContent = dbData.info.nama;
+            }
+        }
+    } catch (e) {}
+
+    // B. UPDATE NAMA OWNER (UNTUK YANG DILINGKARI MERAH)
+    try {
+        const storageUsers = localStorage.getItem('klinikbidan_users_v4');
+        if (storageUsers) {
+            const usersData = JSON.parse(storageUsers);
+            // Cari user yang role-nya owner
+            const owner = usersData.find(u => u.role === 'owner');
+            if (owner && owner.nama) {
+                const elOwner = document.getElementById('display-nama-owner-login');
+                if (elOwner) elOwner.textContent = owner.nama;
+            }
+        }
+    } catch (e) {}
+
+    // C. UPDATE MASA AKTIF (Sudah ada)
+    try {
+        const elTgl = document.getElementById('display-tgl-lisensi');
+        if (elTgl) elTgl.textContent = getMasaAktifOwner();
+    } catch (e) {}
+});
+
+function getSisaHari(tglSelesai) {
+    if (!tglSelesai) return 0;
+    const selisih = new Date(tglSelesai) - new Date();
+    const hari = Math.ceil(selisih / (1000 * 60 * 60 * 24));
+    return hari > 0 ? hari : 0;
+}
+'use strict';
+// ============================================================
+// STORAGE LAYER — works with localStorage (can swap to API)
+// ============================================================
+const SK = 'klinikbidan_v4';
+const SK_U = 'klinikbidan_users_v4';
+let DB = null, USERS = null, SESSION = null;
+let _saving = false, _saveQ = false, _syncState = 'online';
+
+async function stGet(key) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch(e) { return null; }
+}
+async function stSet(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); return true; } catch(e) { return false; }
+}
+
+async function cloudLoad() {
+  setSyncState('syncing');
+  try {
+    if (window.storage) {
+      const [d, u] = await Promise.all([
+        window.storage.get(SK, true).catch(()=>null),
+        window.storage.get(SK_U, true).catch(()=>null)
+      ]);
+      DB = (d && JSON.parse(d.value)) || await stGet(SK) || defaultDB();
+      USERS = (u && JSON.parse(u.value)) || await stGet(SK_U) || defaultUsers();
+    } else {
+      DB = await stGet(SK) || defaultDB();
+      USERS = await stGet(SK_U) || defaultUsers();
+    }
+    setSyncState('online');
+  } catch(e) {
+    DB = await stGet(SK) || defaultDB();
+    USERS = await stGet(SK_U) || defaultUsers();
+    setSyncState('offline');
+  }
+
+  // === KODE PENAMBAL DATABASE (AUTO-FIX UNTUK HP) ===
+  if (!DB.txObat) DB.txObat = [];
+  if (!DB.hargaTindakan) DB.hargaTindakan = [];
+  if (!DB.biaya) DB.biaya = [];
+  if (!DB.kategoriBiaya) DB.kategoriBiaya = ['Gaji & SDM', 'Alat Medis Habis Pakai', 'Operasional (Listrik/Air/Wifi)', 'Pemeliharaan', 'Perizinan', 'Pemasaran'];
+  // ==================================================
+
+  // Menyimpan kembali database yang sudah diperbaiki ke memori HP
+  await stSet(SK, DB);
+  await stSet(SK_U, USERS);
+}
+
+
+async function cloudSave() {
+  if (_saving) { _saveQ = true; return; }
+  _saving = true;
+  setSyncState('syncing');
+  try {
+    await stSet(SK, DB);
+    await stSet(SK_U, USERS);
+    if (window.storage) {
+      await Promise.all([
+        window.storage.set(SK, JSON.stringify(DB), true).catch(()=>{}),
+        window.storage.set(SK_U, JSON.stringify(USERS), true).catch(()=>{})
+      ]);
+    }
+    setSyncState('online');
+  } catch(e) {
+    setSyncState('offline');
+  }
+  _saving = false;
+  if (_saveQ) { _saveQ = false; cloudSave(); }
+}
+
+let _saveTimer = null;
+function scheduleSave() { clearTimeout(_saveTimer); _saveTimer = setTimeout(cloudSave, 1200); }
+
+async function doSync() {
+  showNotif('Sinkronisasi data...');
+  await cloudLoad();
+  render();
+  showNotif('✓ Data tersinkronisasi');
+}
+
+function setSyncState(s) {
+  _syncState = s;
+  const dot = document.getElementById('sdot');
+  const txt = document.getElementById('sync-txt');
+  if (!dot) return;
+  dot.className = 'sdot ' + s;
+  txt.textContent = s === 'online' ? 'Tersinkronisasi' : s === 'syncing' ? 'Menyinkronkan...' : 'Offline';
+}
+
+// ============================================================
+// DEFAULT DATA
+// ============================================================
+function defaultUsers() {
+  return [
+    {id:'u1',username:'owner',password:'owner123',role:'owner',nama:'PMB Bdn. RINI, S. Keb',masaAktif: '2026-05-01',bidanId:null},
+    {id:'u2',username:'bidan1',password:'bidan123',role:'pegawai',nama:'Bdn. Sri Wahyuni, A.Md.Keb',masaAktif: '2026-05-01',bidanId:1},
+    {id:'u3',username:'bidan2',password:'bidan456',role:'pegawai',nama:'Bdn. Eka Putri, A.Md.Keb',masaAktif: '2026-05-01',bidanId:2},
+  ];
+}
+
+function defaultDB() {
+  return {
+    info:{nama:'Klinik Bidan Sehat',alamat:'Jl. Kesehatan No.1, Kota Sehat',telp:'(021) 1234-5678',tagline:'Praktik Kebidanan Bersertifikat'},
+    // Pastikan daftar hargaTindakan ditulis seperti ini
+    hargaTindakan: [
+      {id: 1, nama: 'ANC (Kehamilan)', harga: 50000, jasa: 10000},
+      {id: 2, nama: 'KB Suntik 3 Bulan', harga: 35000, jasa: 5000},
+      {id: 3, nama: 'Persalinan Normal', harga: 1500000, jasa: 300000},
+      {id: 4, nama: 'Pemeriksaan Umum', harga: 30000, jasa: 5000}
+    ], 
+    pasien:[
+      {id:1,nama:'Siti Rahayu',nik:'3273010101900001',tgl:'1990-01-15',hp:'08121234567',gol:'B',jaminan:'BPJS',alamat:'Jl. Merdeka No.10'},
+      {id:2,nama:'Dewi Lestari',nik:'3273010202920002',tgl:'1992-06-22',hp:'08131234567',gol:'A',jaminan:'Umum',alamat:'Jl. Mawar No.5'},
+      {id:3,nama:'Rina Susanti',nik:'3273010303880003',tgl:'1988-03-10',hp:'08151234567',gol:'O',jaminan:'BPJS',alamat:'Jl. Melati No.2'}
+    ],
+    kunjungan:[
+      {id:1,pasienId:1,bidanId:1,layanan:'ANC (Kehamilan)',tgl:'2026-04-28',keluhan:'Kontrol rutin',bb:'62',tb:'158',td:'110/70',suhu:'36.5',nadi:'82',uk:'28 minggu',cat:'UK 28 minggu, DJJ 142x/mnt, kondisi baik.',tind:'Pemeriksaan Leopold, edukasi nutrisi',resep:[{obatId:1,dosis:'1x1',jml:30}]},
+      {id:2,pasienId:2,bidanId:2,layanan:'KB',tgl:'2026-04-28',keluhan:'Suntik KB ulangan',bb:'55',tb:'155',td:'120/80',suhu:'36.6',nadi:'78',uk:'',cat:'Suntik KB 3 bulan',tind:'Suntik KB Depo Provera',resep:[]},
+      {id:3,pasienId:3,bidanId:1,layanan:'Imunisasi',tgl:'2026-04-29',keluhan:'Imunisasi TT2',bb:'58',tb:'160',td:'118/76',suhu:'36.4',nadi:'82',uk:'',cat:'TT2 diberikan, tidak ada reaksi alergi',tind:'Injeksi TT2 IM deltoid',resep:[{obatId:4,dosis:'Jika perlu',jml:6}]}
+    ],
+    antrian:[],
+    obat:[
+      {id:1,nama:'Asam Folat 400mcg',kat:'Vitamin & Suplemen',stok:120,stokMin:30,sat:'Tablet',exp:'2027-06-01',hb:500,hj:1000,prod:'Kimia Farma'},
+      {id:2,nama:'Fe (Zat Besi) 60mg',kat:'Vitamin & Suplemen',stok:8,stokMin:30,sat:'Tablet',exp:'2027-03-01',hb:600,hj:1200,prod:'Kimia Farma'},
+      {id:3,nama:'Amoxicillin 500mg',kat:'Antibiotik',stok:45,stokMin:20,sat:'Kapsul',exp:'2026-12-01',hb:2000,hj:3500,prod:'Hexpharm'},
+      {id:4,nama:'Paracetamol 500mg',kat:'Analgesik',stok:15,stokMin:30,sat:'Tablet',exp:'2027-01-01',hb:500,hj:800,prod:'Kalbe Farma'},
+      {id:5,nama:'Metilergometrin 0.2mg',kat:'Oksitosin/Ergot',stok:60,stokMin:15,sat:'Ampul',exp:'2026-09-01',hb:8000,hj:12000,prod:'Kimia Farma'},
+      {id:6,nama:'Ondansetron 4mg',kat:'Antiemetik',stok:5,stokMin:20,sat:'Tablet',exp:'2027-02-01',hb:3000,hj:5000,prod:'Dexa Medica'}
+    ],
+    txObat:[],
+	biaya: [], // Tempat simpan pengeluaran
+	kategoriBiaya: ['Gaji & SDM', 'Alat Medis Habis Pakai', 'Operasional (Listrik/Air/Wifi)', 'Pemeliharaan', 'Perizinan', 'Pemasaran'],
+    bidan:[
+      {id:1,nama:'Bdn. Sri Wahyuni, A.Md.Keb',str:'12345678901234',hp:'08111234567',jab:'Kepala Bidan',hari:'Senin–Sabtu',jam:'08:00–14:00',status:'Aktif',cat:''},
+      {id:2,nama:'Bdn. Eka Putri, A.Md.Keb',str:'09876543211234',hp:'08122234567',jab:'Bidan Pelaksana',hari:'Senin–Jumat',jam:'14:00–20:00',status:'Aktif',cat:''}
+    ],
+    ids:{p:4,k:4,a:1,o:7,b:3,tx:1,ht:5}
+  };
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+let loginRole = 'owner';
+
+function setRole(r) {
+  loginRole = r;
+  document.getElementById('rt-owner').classList.toggle('act', r==='owner');
+  document.getElementById('rt-peg').classList.toggle('act', r==='pegawai');
+}
+
+function doLogin() {
+  const u = document.getElementById('l-user').value.trim();
+  const p = document.getElementById('l-pass').value;
+  const err = document.getElementById('lerr');
+  err.style.display = 'none';
+
+  const found = USERS.find(x => x.username === u && x.password === p && x.role === loginRole);
+
+  if (!found) {
+    err.textContent = 'Username/password salah.';
+    err.style.display = 'block';
+    return;
+  }
+
+  // --- LOGIKA CEK MASA AKTIF (VERSI BARU) ---
+  const hariIni = new Date().toISOString().slice(0, 10);
+  
+  if (!found.masaAktif || found.masaAktif < hariIni) {
+    err.innerHTML = `
+      <div style="text-align:center; padding:10px">
+        <strong style="color:var(--re)">⚠️ AKSES TERKUNCI</strong><br>
+        Masa aktif akun ini (${found.username}) telah habis.<br>
+        <div style="margin-top:10px; border-top:1px dashed #fca5a5; padding-top:10px">
+          <input type="text" id="k-lisensi" placeholder="Masukkan Kode Aktivasi" 
+                 style="width:100%; padding:8px; border:1px solid #ccc; border-radius:5px; text-align:center; font-family:monospace;">
+          <button class="btn p sm" style="width:100%; margin-top:5px" onclick="prosesAktivasiKode()">Aktifkan Sekarang</button>
+        </div>
+      </div>`;
+    err.style.display = 'block';
+    return;
+  }
+  // ---------------------------------------
+
+  SESSION = found;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-shell').style.display = 'flex';
+  
+  // Setup tampilan awal dashboard
+  const initials = found.nama.replace(/Bdn\. |Dr\. /g,'').split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  document.getElementById('av-el').textContent = initials;
+  document.getElementById('av-el').className = 'av ' + (found.role === 'owner' ? 'owner' : 'pegawai');
+  document.getElementById('av-name').textContent = found.nama.replace(/Bdn\. |Dr\. /g,'').split(',')[0];
+  document.getElementById('av-role').textContent = found.role === 'owner' ? '👑 Owner' : '🩺 Pegawai';
+  
+  buildNav();
+  PAGE = 'dashboard';
+  render();
+}
+
+function doLogout() {
+  SESSION=null; PAGE='dashboard';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('app-shell').style.display='none';
+  document.getElementById('l-user').value='';
+  document.getElementById('l-pass').value='';
+  document.getElementById('lerr').style.display='none';
+}
+
+const isOwner = () => SESSION?.role==='owner';
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+let PAGE = 'dashboard';
+const PTITLES = {dashboard:'Dashboard',antrian:'Antrian & Pendaftaran',pasien:'Data Pasien',kunjungan:'Kunjungan & Resep',obat:'Gudang Obat',transaksi:'Transaksi',pegawai:'Manajemen Pegawai',keuangan:'Laporan Keuangan',laporan:'Laporan & Statistik',profil:'Profil & Pengaturan'};
+
+function buildNav() {
+  const isO = isOwner();
+  document.getElementById('sb-nav').innerHTML = `
+    <div class="ns">Utama</div>
+    <div class="ni act" onclick="nav2(this,'dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Dashboard</div>
+    <div class="ni" onclick="nav2(this,'antrian')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Antrian<span class="nbadge" id="nb-a">0</span></div>
+    <div class="ni" onclick="nav2(this,'pasien')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Data Pasien</div>
+    <div class="ni" onclick="nav2(this,'kunjungan')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/></svg>Kunjungan & Resep</div>
+    <div class="ns">Gudang</div>
+    <div class="ni" onclick="nav2(this,'obat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Gudang Obat</div>
+    ${isO?`<div class="ni" onclick="nav2(this,'transaksi')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Transaksi</div>`:''}
+    ${isO?`<div class="ni" onclick="nav2(this,'backup')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Backup & Restore</div>`:''}
+	${isO?`<div class="ni" onclick="nav2(this,'biaya')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Biaya Operasional</div>`:''}
+	${isO?`<div class="ni" onclick="nav2(this,'biaya')">...</div>`:''}
+	${isO?`<div class="ni" onclick="nav2(this,'acc_diskon')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>ACC Diskon</div>`:''}
+	${isO?`<div class="ns">Owner Panel</div>
+    <div class="ni" onclick="nav2(this,'pegawai')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Manajemen Pegawai</div>
+    <div class="ni" onclick="nav2(this,'keuangan')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Laporan Keuangan</div>
+    <div class="ni" onclick="nav2(this,'laporan')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Laporan & Statistik</div>`:''}
+    <div class="ns">Akun</div>
+    <div class="ni" onclick="nav2(this,'profil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Profil Saya</div>`;
+}
+
+function nav2(el, page) {
+  // 1. Tutup paksa semua pop-up/modal yang mungkin menutupi layar di HP
+  document.querySelectorAll('.ov').forEach(m => m.classList.remove('open'));
+  
+  // 2. Ganti halaman
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('act'));
+  el.classList.add('act');
+  document.getElementById('ptitle').textContent = PTITLES[page] || page;
+  PAGE = page; 
+  render();
+}
+
+function render() {
+  const fns = {
+    dashboard: pgDash,
+    antrian: pgAntrian,
+    pasien: pgPasien,
+    kunjungan: pgKunjungan,
+    obat: pgObat,
+    transaksi: pgTx,
+    biaya: pgBiaya,
+    acc_diskon: pgAccDiskon,
+    pegawai: pgPegawai,
+    keuangan: pgKeuangan,
+    laporan: pgLaporan,
+    backup: pgBackup,
+    profil: pgProfil
+  };
+  document.getElementById('ct').innerHTML = (fns[PAGE] || pgDash)();
+  updateBadge();
+
+  // --- LOGIKA GENERATE GRAFIK DENGAN PELINDUNG (TRY-CATCH) ---
+  if (PAGE === 'keuangan') {
+     try {
+         initKeuanganCharts();
+     } catch (error) {
+         console.log("Grafik gagal dimuat (mungkin file chart.js tidak ada di perangkat ini).");
+     }
+  }
+}
+
+function updateBadge() {
+  const n=(DB.antrian||[]).filter(a=>a.status==='Menunggu' && a.tgl === today()).length;
+  const b=document.getElementById('nb-a');
+  if(b){b.textContent=n;b.style.display=n>0?'':'none';}
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function today(){return new Date().toISOString().slice(0,10);}
+function fmt(n){return (n||0).toLocaleString('id-ID');}
+function umur(t){if(!t)return '-';const d=new Date(t),n=new Date();let y=n.getFullYear()-d.getFullYear();if(n<new Date(n.getFullYear(),d.getMonth(),d.getDate()))y--;return y+' th';}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+function openM(id){document.getElementById(id).classList.add('open');}
+function svgi(d){return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0">${d}</svg>`;}
+function filterTbl(id,q){const t=document.getElementById(id);if(!t)return;t.querySelectorAll('tr:not(:first-child)').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?'':'none';});}
+function lockedPage(){return `<div class="locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><p style="font-size:15px;font-weight:700;color:var(--tx)">Akses Dibatasi</p><p style="margin-top:6px;font-size:13px">Halaman ini hanya untuk <strong>Owner/Pemilik</strong> klinik.</p></div>`;}
+function showNotif(msg,ok=true){const el=document.getElementById('notif');el.textContent=msg;el.style.background=ok?'#1f2937':'#dc2626';el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2800);}
+
+const IALERT='<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>';
+const ISEARCH='<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>';
+
+// ============================================================
+// PAGES
+// ============================================================
+
+// --- DASHBOARD ---
+function pgDash() {
+  const low = DB.obat.filter(o => o.stok <= o.stokMin);
+  
+  // 1. FILTER DATA KHUSUS HARI INI
+  const todayK = DB.kunjungan.filter(k => k.tgl === today());
+  const todayB = (DB.biaya || []).filter(b => b.tgl === today()); 
+  const wait = DB.antrian.filter(a => a.status === 'Menunggu' && a.tgl === today());
+
+  // 2. HITUNG PENERIMAAN KAS (GUNAKAN todayK, BUKAN DB.kunjungan)
+  const penerimaanKas = todayK.reduce((acc, k) => {
+    const oPend = (k.resep || []).reduce((rs, r) => {
+      const o = DB.obat.find(x => x.id === r.obatId);
+      return rs + (o ? o.hj * r.jml : 0);
+    }, 0);
+    
+    const h = DB.hargaTindakan.find(x => x.nama === k.layanan);
+    const hargaLayanan = h ? h.harga : 0;
+    const diskon = k.diskonACC ? (k.diskon || 0) : 0;
+    
+    return acc + (oPend + (hargaLayanan - diskon));
+  }, 0);
+
+  // 3. HITUNG JASA BIDAN (GUNAKAN todayK)
+  const totalJasaBidan = todayK.reduce((acc, k) => {
+    const h = DB.hargaTindakan.find(x => x.nama === k.layanan);
+    return acc + (h ? (h.jasa || 0) : 0);
+  }, 0);
+
+  // 4. HITUNG OPERASIONAL KELUAR (GUNAKAN todayB)
+  const totalOps = todayB.reduce((s, b) => s + b.jumlah, 0);
+
+  // 5. SALDO LACI HARI INI
+  const saldoKasLaci = penerimaanKas - totalJasaBidan - totalOps;
+
+  const alH = low.length ? `<div class="alert aw">${svgi(IALERT)}<span><strong>${low.length} obat</strong> stok rendah/habis...</span></div>` : '';
+  
+  // Kita ubah juga labelnya agar lebih jelas
+  const ob = isOwner() ? `
+    <div class="ob">
+      <div>
+        <p style="font-size:10px;opacity:.75;font-weight:700;text-transform:uppercase;letter-spacing:.07em">👑 Owner Dashboard</p>
+        <p style="font-size:20px;font-weight:700;margin-top:4px">Selamat datang, ${SESSION.nama.split(',')[0]}!</p>
+        <p style="font-size:12px;opacity:.7;margin-top:4px">Data mencerminkan uang tunai fisik yang diterima hari ini.</p>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:26px;font-weight:700">Rp${fmt(saldoKasLaci)}</div>
+        <div style="font-size:11px;opacity:.9;margin-top:2px;font-weight:600;color:#fef08a">💰 Saldo Kas Hari Ini</div>
+      </div>
+    </div>` : '';
+
+  const qHtml = wait.slice(0,5).map(a => {
+    const p = DB.pasien.find(x => x.id === a.pasienId);
+    return `
+    <div class="qi">
+        <div class="qnum">${a.noAntrian}</div>
+        <div style="flex:1">
+            <p style="font-weight:700;font-size:12.5px">${p?p.nama:'-'}</p>
+        </div>
+        <button class="btn sm pp" onclick="panggilAntrian('${a.noAntrian}', '${p?p.nama.replace(/'/g, "\\'"):''}')">📣 Panggil</button>
+        <button class="btn sm p" onclick="openPeriksa(${a.id})">Periksa</button>
+    </div>`;
+}).join('');
+
+  const rK = DB.kunjungan.slice(-5).reverse().map(k => {
+    const p = DB.pasien.find(x => x.id === k.pasienId);
+    const bd = DB.bidan.find(x => x.id === k.bidanId);
+    return `<tr><td><strong style="font-weight:600">${p?p.nama:'-'}</strong></td><td><span class="badge bb2">${k.layanan}</span></td><td style="color:var(--t3)">${bd?bd.nama.replace('Bdn. ','').split(',')[0]:'-'}</td><td>${k.tgl}</td><td>
+  <button class="btn sm" onclick="lihatResep(${k.id})">Resep</button>
+  <button class="btn sm p" onclick="cetakStrukBiaya(${k.id})">Struk</button>
+</td></tr>`;
+  }).join('');
+
+  return `${ob}${alH}<div class="sgrid" style="grid-template-columns:repeat(5,1fr)">
+    <div class="sc g"><div class="sl">Total Pasien</div><div class="sv">${DB.pasien.length}</div><div class="ss">terdaftar</div></div>
+    <div class="sc"><div class="sl">Kunjungan Hari Ini</div><div class="sv">${todayK.length}</div><div class="ss">pasien</div></div>
+    <div class="sc"><div class="sl">Antrian Aktif</div><div class="sv" style="color:${wait.length>0?'var(--re)':'inherit'}">${wait.length}</div><div class="ss">menunggu</div></div>
+    <div class="sc"><div class="sl">Bidan Aktif</div><div class="sv">${DB.bidan.filter(b=>b.status==='Aktif').length}</div><div class="ss">praktik</div></div>
+    <div class="sc"><div class="sl">Stok Perhatian</div><div class="sv" style="color:${low.length>0?'var(--re)':'var(--g)'}">${low.length}</div><div class="ss">jenis obat</div></div>
+  </div>
+
+  <div style="display:flex; justify-content:flex-end; margin-bottom:14px;">
+    <button class="btn" style="background:#111827; color:#fff; border:none; padding:8px 16px" onclick="cetakRekapHarian()">🖨 Cetak Tutup Kasir Hari Ini</button>
+  </div>
+  <div class="g2">
+    <div class="sec"><div class="sh"><h3>Antrian Menunggu (${wait.length})</h3><button class="btn sm p" onclick="openDaftar()">+ Daftarkan</button></div>${wait.length===0?'<p style="text-align:center;color:var(--t3);padding:24px;font-size:12px">Tidak ada antrian aktif saat ini</p>':qHtml}</div>
+    <div class="sec"><div class="sh"><h3>Kunjungan Terbaru</h3></div><table><tr><th>Pasien</th><th>Layanan</th><th>Bidan</th><th>Tgl</th><th></th></tr>${rK||'<tr><td colspan="5" style="text-align:center;color:var(--t3);padding:16px">Belum ada data</td></tr>'}</table></div>
+  </div>`;
+}
+
+// --- ANTRIAN ---
+function pgAntrian() {
+  const wait = DB.antrian.filter(a=>a.status==='Menunggu' && a.tgl === today());
+  const done=DB.antrian.filter(a=>a.status==='Selesai'&&a.tgl===today());
+  const batal=DB.antrian.filter(a=>a.status==='Batal'&&a.tgl===today());
+  // Cari bagian ini di fungsi pgAntrian()
+  const wH = wait.map(a => {
+    const p = DB.pasien.find(x => x.id === a.pasienId);
+    const bd = DB.bidan.find(x => x.id === a.bidanId);
+    return `
+    <div class="qi">
+        <div class="qnum">${a.noAntrian}</div>
+        <div style="flex:1">
+            <p style="font-weight:700;font-size:12.5px">${p?p.nama:'-'} 
+               <span class="badge ${p?.jaminan==='BPJS'?'bb2':'bgy'}" style="margin-left:4px">${p?p.jaminan:'?'}</span>
+            </p>
+            <span style="font-size:11px;color:var(--t3)">${a.layanan} · ${bd?bd.nama.replace('Bdn. ','').split(',')[0]:'?'}</span>
+        </div>
+        <div style="display:flex;gap:6px">
+            <button class="btn sm pp" onclick="panggilAntrian('${a.noAntrian}', '${p?p.nama.replace(/'/g, "\\'"):''}')">📣 Panggil</button>
+            
+            <button class="btn sm p" onclick="openPeriksa(${a.id})">Periksa</button>
+            <button class="btn sm d" onclick="batalAntrian(${a.id})">Batal</button>
+        </div>
+    </div>`;
+}).join('');
+  const dR=done.map(a=>{const p=DB.pasien.find(x=>x.id===a.pasienId);return `<tr><td>${a.noAntrian}</td><td>${p?p.nama:'-'}</td><td>${a.layanan}</td><td><span class="badge bg2">Selesai</span></td><td>${a.kunjunganId?`<button class="btn sm" onclick="lihatResep(${a.kunjunganId})">Resep</button>`:'-'}</td></tr>`;}).join('');
+  return `<div class="sec"><div class="sh"><h3>Antrian Menunggu (${wait.length})</h3><button class="btn p" onclick="openDaftar()">+ Daftarkan Pasien</button></div>${wait.length===0?'<p style="text-align:center;color:var(--t3);padding:28px;font-size:12px">Tidak ada antrian. Klik tombol untuk mendaftarkan pasien.</p>':wH}</div>
+  <div class="g2">
+    <div class="sec"><div class="sh"><h3>Selesai Hari Ini (${done.length})</h3></div><table><tr><th>No</th><th>Pasien</th><th>Layanan</th><th>Status</th><th>Aksi</th></tr>${dR||'<tr><td colspan="5" style="text-align:center;color:var(--t3);padding:16px">Belum ada</td></tr>'}</table></div>
+    <div class="sec"><div class="sh"><h3>Statistik Hari Ini</h3></div>
+      <div class="g2" style="gap:8px">
+        <div class="sc"><div class="sl">Masuk</div><div class="sv">${DB.antrian.filter(a=>a.tgl===today()).length}</div></div>
+        <div class="sc"><div class="sl">Selesai</div><div class="sv" style="color:var(--g)">${done.length}</div></div>
+        <div class="sc"><div class="sl">Menunggu</div><div class="sv" style="color:${wait.length>0?'var(--re)':'inherit'}">${wait.length}</div></div>
+        <div class="sc"><div class="sl">Batal</div><div class="sv" style="color:var(--am)">${batal.length}</div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// --- PASIEN ---
+function pgPasien() {
+  const rows = DB.pasien.map(p => {
+    const jK = DB.kunjungan.filter(k => k.pasienId === p.id).length;
+    return `
+      <tr>
+        <td>
+          <strong style="font-weight:600">${p.nama}</strong><br>
+          <span style="font-size:10px;color:var(--t3)">${p.nik || '–'}</span>
+        </td>
+        <td>${umur(p.tgl)}</td>
+        <td>${p.gol || '-'}</td>
+        <td><span class="badge ${p.jaminan === 'BPJS' ? 'bb2' : 'bgy'}">${p.jaminan}</span></td>
+        <td>${p.hp || '-'}</td>
+        <td style="color:var(--t3)">${jK}×</td>
+        <td>
+          <!-- Tombol Riwayat untuk melihat histori periksa & cetak struk lama -->
+          <button class="btn sm" onclick="showRiwayat(${p.id})">Riwayat</button> 
+          <button class="btn sm" onclick="editPasien(${p.id})">Edit</button>
+          ${isOwner() ? ` <button class="btn sm d" onclick="hapusPasien(${p.id})">Hapus</button>` : ''}
+        </td>
+      </tr>`;
+  }).join('');
+
+  return `
+    <div class="sec">
+      <div class="sh">
+        <h3>Data Pasien (${DB.pasien.length})</h3>
+        <div style="display:flex;gap:8px">
+          <div class="sw">${svgi(ISEARCH)}<input placeholder="Cari nama / NIK..." oninput="filterTbl('tp',this.value)"></div>
+          <button class="btn p" onclick="clearPasienM();openM('m-pasien')">+ Tambah Pasien</button>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table id="tp">
+          <tr><th>Nama/NIK</th><th>Umur</th><th>Gol</th><th>Jaminan</th><th>HP</th><th>Kunjungan</th><th>Aksi</th></tr>
+          ${rows || '<tr><td colspan="7" style="text-align:center;color:var(--t3);padding:20px">Belum ada data pasien</td></tr>'}
+        </table>
+      </div>
+    </div>`;
+}
+
+// --- KUNJUNGAN ---
+function pgKunjungan() {
+  const rows=DB.kunjungan.slice().reverse().map(k=>{const p=DB.pasien.find(x=>x.id===k.pasienId);const bd=DB.bidan.find(x=>x.id===k.bidanId);const ol=(k.resep||[]).map(r=>{const o=DB.obat.find(x=>x.id===r.obatId);return o?o.nama:'-';}).join(', ')||'–';return `<tr><td>${k.tgl}</td><td><strong style="font-weight:600">${p?p.nama:'-'}</strong></td><td><span class="badge bb2">${k.layanan}</span></td><td style="color:var(--t3)">${bd?bd.nama.replace('Bdn. ','').split(',')[0]:'-'}</td><td>${k.td||'-'}</td><td style="max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--t3)">${k.cat||'-'}</td><td style="font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${ol}</td><td>
+  <button class="btn sm" onclick="lihatResep(${k.id})">Resep</button>
+  <button class="btn sm p" onclick="cetakStrukBiaya(${k.id})">Struk</button>
+</td></tr>`;}).join('');
+  return `<div class="sec"><div class="sh"><h3>Kunjungan (${DB.kunjungan.length})</h3><div style="display:flex;gap:8px"><div class="sw">${svgi(ISEARCH)}<input placeholder="Cari..." oninput="filterTbl('tk',this.value)"></div><button class="btn p" onclick="openDaftar()">+ Kunjungan Baru</button></div></div><div class="tbl-wrap"><table id="tk"><tr><th>Tgl</th><th>Pasien</th><th>Layanan</th><th>Bidan</th><th>TD</th><th>Catatan</th><th>Obat</th><th></th></tr>${rows||'<tr><td colspan="8" style="text-align:center;color:var(--t3);padding:20px">Belum ada data kunjungan</td></tr>'}</table></div></div>`;
+}
+
+// --- GUDANG OBAT ---
+function pgObat() {
+  const low=DB.obat.filter(o=>o.stok<=o.stokMin);
+  const alH=low.length?`<div class="alert aw">${svgi(IALERT)}<span>${low.length} obat perlu segera direstok</span></div>`:'';
+  
+  // Tab menu baru
+  const tabs = `
+    <div class="tabs">
+      <div class="tab act" onclick="navObat('stok')">Stok Obat</div>
+      <div class="tab" onclick="navObat('harga')">Harga Tindakan</div>
+    </div>
+  `;
+
+  const stokContent = `
+    <div id="obat-stok-sec">
+      <div class="sh"><h3>Gudang Obat (${DB.obat.length})</h3><div style="display:flex;gap:8px"><div class="sw">${svgi(ISEARCH)}<input placeholder="Cari obat..." oninput="filterTbl('to',this.value)"></div>${isOwner()?`<button class="btn p" onclick="clearObatM();openM('m-obat')">+ Tambah Obat</button>`:''}</div></div>
+      <div class="tbl-wrap"><table id="to"><tr><th>Obat</th><th>Stok</th><th>Min</th><th>Exp</th><th>Harga Jual</th><th>Status</th><th>Aksi</th></tr>
+      ${DB.obat.map(o=>{
+        const pct=Math.min(100,Math.round(o.stok/(o.stokMin||1)*100));
+        const col=o.stok===0?'#dc2626':o.stok<=o.stokMin?'#d97706':'#16a34a';
+        return `<tr><td><strong style="font-weight:600">${o.nama}</strong><br><span style="font-size:10px;color:var(--t3)">${o.kat}${o.prod?' · '+o.prod:''}</span></td><td><span style="font-weight:700">${o.stok}</span> ${o.sat}<div class="sbar"><div class="sfill" style="width:${pct}%;background:${col}"></div></div></td><td>${o.stokMin}</td><td style="font-size:11px;color:var(--t3)">${o.exp||'-'}</td><td>Rp${fmt(o.hj)}</td><td><span class="badge ${o.stok===0?'br2':o.stok<=o.stokMin?'ba2':'bg2'}">${o.stok===0?'Habis':o.stok<=o.stokMin?'Rendah':'Aman'}</span></td><td><button class="btn sm" onclick="openStok(${o.id})">+ Stok</button>${isOwner()?` <button class="btn sm" onclick="editObat(${o.id})">Edit</button> <button class="btn sm d" onclick="hapusObat(${o.id})">Hapus</button>`:''}</td></tr>`;
+      }).join('')}
+      </table></div>
+    </div>
+  `;
+
+  const hargaContent = `
+  <div id="obat-harga-sec" style="display:none">
+    <div class="sh"><h3>Daftar Harga & Jasa Tindakan</h3><button class="btn p" onclick="tambahHargaTindakan()">+ Tambah Harga</button></div>
+    <div class="tbl-wrap"><table>
+      <tr><th>Nama Tindakan</th><th>Harga (Rp)</th><th>Jasa Pegawai (Rp)</th><th style="text-align:right">Aksi</th></tr>
+      ${DB.hargaTindakan.map(h=>`<tr>
+        <td><strong>${h.nama}</strong></td>
+        <td>Rp${fmt(h.harga)}</td>
+        <td style="color:var(--p); font-weight:600">Rp${fmt(h.jasa || 0)}</td>
+        <td style="white-space:nowrap; text-align:right">
+          <button class="btn sm" onclick="editHarga(${h.id})">Edit</button>
+          <button class="btn sm d" onclick="hapusHargaTindakan(${h.id})">Hapus</button> 
+        </td>
+      </tr>`).join('')}
+    </table></div>
+  </div>
+`;
+
+  return `${alH}${tabs}${stokContent}${hargaContent}`;
+}
+
+// --- TRANSAKSI ---
+function pgTx() {
+  if(!isOwner()) return lockedPage();
+  const all = [];
+
+  // 1. Masukkan Transaksi Obat dari Kunjungan
+  DB.kunjungan.forEach(k => {
+    (k.resep || []).forEach(r => {
+      const o = DB.obat.find(x => x.id === r.obatId);
+      const p = DB.pasien.find(x => x.id === k.pasienId);
+      all.push({
+        tgl: k.tgl,
+        ket: p ? p.nama : '-',
+        item: o ? o.nama : '-',
+        jml: r.jml + ' ' + (o ? o.sat : ''),
+        nilai: o ? o.hj * r.jml : 0,
+        jenis: 'Obat Keluar'
+      });
+    });
+
+    // 2. Masukkan Transaksi Tindakan/Layanan dari Kunjungan
+    const h = DB.hargaTindakan.find(x => x.nama === k.layanan);
+    const p = DB.pasien.find(x => x.id === k.pasienId);
+    all.push({
+      tgl: k.tgl,
+      ket: p ? p.nama : '-',
+      item: k.layanan,
+      jml: '1 Layanan',
+      nilai: h ? h.harga : 0,
+      jenis: 'Tindakan'
+    });
+  });
+
+  // 3. Masukkan Restok Obat (Masuk)
+  DB.txObat.forEach(tx => {
+    const o = DB.obat.find(x => x.id === tx.obatId);
+    all.push({
+      tgl: tx.tgl,
+      ket: tx.ket || 'Restok Gudang',
+      item: o ? o.nama : '-',
+      jml: tx.jml + ' ' + (o ? o.sat : ''),
+      nilai: 0,
+      jenis: 'Obat Masuk'
+    });
+  });
+
+  all.sort((a, b) => b.tgl.localeCompare(a.tgl));
+  const totalPendapatan = all.reduce((s, t) => s + t.nilai, 0);
+
+  const rows = all.map(t => `
+    <tr>
+      <td>${t.tgl}</td>
+      <td>${t.ket}</td>
+      <td><strong>${t.item}</strong></td>
+      <td>${t.jml}</td>
+      <td>${t.nilai > 0 ? 'Rp' + fmt(t.nilai) : '-'}</td>
+      <td><span class="badge ${t.jenis === 'Obat Masuk' ? 'bg2' : t.jenis === 'Tindakan' ? 'bp2' : 'ba2'}">${t.jenis}</span></td>
+    </tr>`).join('');
+
+  return `
+    <div class="sgrid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="sc"><div class="sl">Total Transaksi</div><div class="sv">${all.length}</div><div class="ss">Item masuk & keluar</div></div>
+      <div class="sc g"><div class="sl">Total Nilai Transaksi</div><div class="sv">Rp${fmt(totalPendapatan)}</div><div class="ss">Layanan + Obat Terjual</div></div>
+      <div class="sc"><div class="sl">Restok Obat</div><div class="sv">${DB.txObat.length}</div><div class="ss">Kali penambahan stok</div></div>
+    </div>
+    <div class="sec">
+      <div class="sh"><h3>Riwayat Transaksi Lengkap</h3></div>
+      <div class="tbl-wrap">
+        <table id="ttx">
+          <tr><th>Tgl</th><th>Pasien/Ket</th><th>Item/Layanan</th><th>Jumlah</th><th>Nilai</th><th>Jenis</th></tr>
+          ${rows || '<tr><td colspan="6" style="text-align:center;color:var(--t3);padding:20px">Belum ada data transaksi</td></tr>'}
+        </table>
+      </div>
+    </div>`;
+}
+
+// --- PEGAWAI ---
+function pgPegawai() {
+  if(!isOwner())return lockedPage();
+  const BC=[['#dcfce7','#15803d'],['#dbeafe','#1d4ed8'],['#fef3c7','#b45309'],['#fce7f3','#be185d'],['#f3e8ff','#7e22ce']];
+  const cards=DB.bidan.map((b,i)=>{const [bg,tc]=BC[i%5];const init=b.nama.replace('Bdn. ','').split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();const jK=DB.kunjungan.filter(k=>k.bidanId===b.id).length;const usr=USERS.find(u=>u.bidanId===b.id);return `<div class="bc"><div style="width:46px;height:46px;border-radius:50%;background:${bg};color:${tc};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0">${init}</div><div style="flex:1"><p style="font-weight:700;font-size:13px">${b.nama}</p><p style="font-size:11px;color:var(--t3);margin-top:2px">${b.jab} · STR: ${b.str||'-'}</p><p style="font-size:11px;color:var(--t3)">📅 ${b.hari||'-'} · ⏰ ${b.jam||'-'}</p><p style="font-size:11px;color:var(--t3)">📞 ${b.hp||'-'}</p><p style="font-size:11px;margin-top:4px">Login: <code style="background:var(--bg);border:1px solid var(--bd);padding:1px 5px;border-radius:4px;font-family:'DM Mono',monospace">${usr?usr.username:'–'}</code></p><div style="display:flex;gap:6px;margin-top:8px"><span class="badge ${b.status==='Aktif'?'bg2':b.status==='Cuti'?'ba2':'br2'}">${b.status}</span><span style="font-size:11px;color:var(--t3)">${jK} kunjungan</span></div></div><div style="display:flex;flex-direction:column;gap:6px"><button class="btn sm" onclick="editBidan(${b.id})">Edit</button><button class="btn sm d" onclick="hapusBidan(${b.id})">Hapus</button></div></div>`;}).join('');
+  return `<div class="sec"><div class="sh"><h3>Daftar Pegawai (${DB.bidan.length})</h3><button class="btn p" onclick="clearBidanM();openM('m-bidan')">+ Tambah Pegawai</button></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">${cards||'<p style="color:var(--t3);grid-column:1/-1;text-align:center;padding:20px">Belum ada pegawai</p>'}</div></div>`;
+}
+
+// --- KEUANGAN ---
+let _fMulai = today();
+let _fSelesai = today();
+
+function setFilterKeuangan() {
+  _fMulai = document.getElementById('f-mulai').value;
+  _fSelesai = document.getElementById('f-selesai').value;
+  render(); 
+}
+
+function pgKeuangan() {
+  if(!isOwner()) return lockedPage();
+
+  // 1. Filter Data Berdasarkan Periode yang Dipilih
+  const kunjunganFilter = DB.kunjungan.filter(k => k.tgl >= _fMulai && k.tgl <= _fSelesai);
+  const biayaFilter = (DB.biaya || []).filter(b => b.tgl >= _fMulai && b.tgl <= _fSelesai);
+
+  // 2. Hitung Total Diskon yang di-ACC
+  const totalDiskonOwner = kunjunganFilter.reduce((s, k) => {
+    return s + (k.diskonACC ? (k.diskon || 0) : 0);
+  }, 0);
+
+  // 3. Hitung Pendapatan
+  const pendObat = kunjunganFilter.reduce((s, k) => s + (k.resep || []).reduce((rs, r) => {
+    const o = DB.obat.find(x => x.id === r.obatId);
+    return rs + (o ? o.hj * r.jml : 0);
+  }, 0), 0);
+
+  const pendTindakanBruto = kunjunganFilter.reduce((s, k) => {
+    const h = DB.hargaTindakan.find(x => x.nama === k.layanan);
+    return s + (h ? h.harga : 0);
+  }, 0);
+
+  const totalOmzetNet = (pendObat + pendTindakanBruto) - totalDiskonOwner;
+
+  // 4. Hitung Beban Pengeluaran
+  const hppObat = kunjunganFilter.reduce((s, k) => s + (k.resep || []).reduce((rs, r) => {
+    const o = DB.obat.find(x => x.id === r.obatId);
+    return rs + (o ? o.hb * r.jml : 0);
+  }, 0), 0);
+
+  const totalJasaPegawai = kunjunganFilter.reduce((s, k) => {
+    const h = DB.hargaTindakan.find(x => x.nama === k.layanan);
+    return s + (h ? (h.jasa || 0) : 0);
+  }, 0);
+
+  const totalBiayaUmum = biayaFilter.reduce((s, b) => s + b.jumlah, 0);
+  const totalBebanKlinik = hppObat + totalJasaPegawai + totalBiayaUmum;
+  
+  const profit = totalOmzetNet - totalBebanKlinik;
+  const margin = totalOmzetNet > 0 ? Math.round(profit / totalOmzetNet * 100) : 0;
+
+  // TAMPILAN HALAMAN[cite: 2]
+  return `
+    <div class="sec" style="margin-bottom:12px">
+      <div class="sh">
+        <h3>Filter Periode Laporan</h3>
+        <div style="display:flex; gap:8px; align-items:center">
+          <input type="date" id="f-mulai" value="${_fMulai}" class="btn sm" style="width:140px">
+          <span style="font-size:11px; color:var(--t3)">s/d</span>
+          <input type="date" id="f-selesai" value="${_fSelesai}" class="btn sm" style="width:140px">
+          <button class="btn p sm" onclick="setFilterKeuangan()">Terapkan Filter</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sgrid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="sc g"><div class="sl">Omzet Net</div><div class="sv" style="font-size:17px">Rp${fmt(totalOmzetNet)}</div><div class="ss">Setelah Diskon</div></div>
+      <div class="sc d"><div class="sl">Total Beban</div><div class="sv" style="font-size:17px; color:var(--re)">Rp${fmt(totalBebanKlinik)}</div><div class="ss">HPP + Jasa + Ops</div></div>
+      <div class="sc p"><div class="sl">Laba Bersih</div><div class="sv" style="font-size:17px">Rp${fmt(profit)}</div><div class="ss">Margin ${margin}%</div></div>
+      <div class="sc"><div class="sl">Total Aset</div><div class="sv" style="font-size:17px">Rp${fmt(DB.obat.reduce((s, o) => s + (o.hb * o.stok), 0))}</div><div class="ss">Nilai Gudang</div></div>
+    </div>
+
+    <div class="sec" style="margin-bottom:14px;">
+      <div class="sh"><h3>Grafik Analisis Tren & Pengeluaran</h3></div>
+      <div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px; min-height:220px">
+        <div style="background:#fff; padding:10px; border:1px solid var(--bd); border-radius:var(--r)">
+          <canvas id="chartTrenKeuangan" style="max-height:220px"></canvas>
+        </div>
+        <div style="background:#fff; padding:10px; border:1px solid var(--bd); border-radius:var(--r); display:flex; justify-content:center">
+          <canvas id="chartAlokasiBeban" style="max-height:220px"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="sec">
+        <div class="sh"><h3>Rincian Pengeluaran & Potongan</h3></div>
+        <table style="font-size:11px">
+          <tr><td>Harga Pokok Obat (HPP)</td><td style="text-align:right">Rp${fmt(hppObat)}</td></tr>
+          <tr><td>Jasa Pegawai/Bidan</td><td style="text-align:right">Rp${fmt(totalJasaPegawai)}</td></tr>
+          <tr><td>Operasional Klinik</td><td style="text-align:right">Rp${fmt(totalBiayaUmum)}</td></tr>
+          <tr style="color:var(--re)"><td>Diskon Owner (ACC)</td><td style="text-align:right; font-weight:600">Rp${fmt(totalDiskonOwner)}</td></tr>
+          <tr style="font-weight:700; border-top:1px solid var(--bd); font-size:12px">
+            <td>TOTAL BEBAN & POTONGAN</td>
+            <td style="text-align:right">Rp${fmt(totalBebanKlinik + totalDiskonOwner)}</td>
+          </tr>
+        </table>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px">
+        <div class="sec" style="margin-bottom:0">
+          <div class="sh"><h3>Analisis Laba</h3></div>
+          <p style="font-size:12px; color:var(--t2)">
+            Laba bersih Anda periode ini adalah <strong>Rp${fmt(profit)}</strong>.<br><br>
+            Data ini mencakup omzet tindakan yang sudah dikurangi total subsidi diskon sebesar 
+            <strong>Rp${fmt(totalDiskonOwner)}</strong> yang Anda berikan kepada pasien.
+          </p>
+        </div>
+
+        <div class="sec" style="background:#f8fafc; border:1px solid #93c5fd; border-radius:var(--r)">
+          <div class="sh" style="margin-bottom:8px">
+            <h3 style="color:#1e40af">💡 Panduan Alokasi Uang Fisik</h3>
+          </div>
+          <p style="font-size:11.5px; color:#334155; margin-bottom:10px">
+            Dari total uang tunai yang terkumpul di laci (setelah bayar jasa & operasional), berikut cara membaginya ke rekening bank Anda:
+          </p>
+          <table style="font-size:12px; width:100%; border-collapse:collapse">
+            <tr style="border-bottom:1px solid #bfdbfe">
+              <td style="padding:6px 0; font-weight:600; color:#b91c1c">1. Simpan untuk Modal Obat (HPP)</td>
+              <td style="text-align:right; font-weight:700; color:#b91c1c">Rp${fmt(hppObat)}</td>
+            </tr>
+            <tr style="border-bottom:1px solid #bfdbfe">
+              <td style="padding:6px 0; font-weight:600; color:#16a34a">2. Tarik sebagai Laba (Hak Owner)</td>
+              <td style="text-align:right; font-weight:700; color:#16a34a">Rp${fmt(profit)}</td>
+            </tr>
+            <tr style="background:#eff6ff">
+              <td style="padding:8px 6px; font-weight:700; color:#1e3a8a; border-radius:4px 0 0 4px">Total Uang Disetor ke Bank</td>
+              <td style="text-align:right; font-weight:700; color:#1e3a8a; padding:8px 6px; border-radius:0 4px 4px 0">Rp${fmt(profit + hppObat)}</td>
+            </tr>
+          </table>
+          <p style="font-size:10px; color:#64748b; margin-top:8px; font-style:italic">
+            *Jangan gunakan uang modal obat (poin 1) untuk keperluan pribadi agar klinik selalu bisa restok obat.
+          </p>
+        </div>
+      </div>
+    </div>`;
+}
+
+// --- LAPORAN ---
+function pgLaporan() {
+  if(!isOwner())return lockedPage();
+  const lCnt={};DB.kunjungan.forEach(k=>{lCnt[k.layanan]=(lCnt[k.layanan]||0)+1;});
+  const maxL=Math.max(...Object.values(lCnt),1);
+  const bars=Object.entries(lCnt).sort((a,b)=>b[1]-a[1]).map(([l,c])=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><div style="width:130px;font-size:11px;color:var(--t3);text-align:right;flex-shrink:0">${l}</div><div style="flex:1;background:#e5e7eb;border-radius:4px;height:20px;overflow:hidden"><div style="width:${Math.round(c/maxL*100)}%;background:var(--g);height:100%;display:flex;align-items:center;padding-left:8px"><span style="font-size:11px;font-weight:700;color:#fff">${c}</span></div></div></div>`).join('');
+  const jCnt={};DB.pasien.forEach(p=>{jCnt[p.jaminan]=(jCnt[p.jaminan]||0)+1;});
+  const jRows=Object.entries(jCnt).map(([j,c])=>`<tr><td>${j}</td><td>${c}</td><td>${Math.round(c/DB.pasien.length*100)}%</td></tr>`).join('');
+  const bRows=DB.bidan.map(b=>{const c=DB.kunjungan.filter(k=>k.bidanId===b.id).length;return `<tr><td>${b.nama.replace('Bdn. ','').split(',')[0]}</td><td>${b.jab}</td><td>${c}</td><td><span class="badge ${b.status==='Aktif'?'bg2':b.status==='Cuti'?'ba2':'br2'}">${b.status}</span></td></tr>`;}).join('');
+  return `<div class="g2"><div class="sec"><div class="sh"><h3>Kunjungan per Layanan</h3></div>${bars||'<p style="color:var(--t3);text-align:center;padding:20px">Belum ada data</p>'}</div><div class="sec"><div class="sh"><h3>Pasien per Jaminan</h3></div><table><tr><th>Jaminan</th><th>Jumlah</th><th>%</th></tr>${jRows}</table></div></div>
+  <div class="g2"><div class="sec"><div class="sh"><h3>Statistik Bidan</h3></div><table><tr><th>Nama</th><th>Jabatan</th><th>Kunjungan</th><th>Status</th></tr>${bRows}</table></div>
+  <div class="sec"><div class="sh"><h3>Stok Obat Lengkap</h3></div><table><tr><th>Obat</th><th>Stok</th><th>Min</th><th>Status</th></tr>${DB.obat.map(o=>`<tr><td>${o.nama}</td><td>${o.stok} ${o.sat}</td><td>${o.stokMin}</td><td><span class="badge ${o.stok===0?'br2':o.stok<=o.stokMin?'ba2':'bg2'}">${o.stok===0?'Habis':o.stok<=o.stokMin?'Rendah':'Aman'}</span></td></tr>`).join('')}</table></div></div>`;
+}
+
+// --- PROFIL ---
+function pgProfil() {
+  const u=SESSION;
+  const b=u.bidanId?DB.bidan.find(x=>x.id===u.bidanId):null;
+  const jK=b?DB.kunjungan.filter(k=>k.bidanId===b.id).length:'-';
+  return `<div class="g2"><div class="sec"><div class="sh"><h3>Profil Akun Saya</h3></div>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--bd)">
+      <div class="av ${u.role}" style="width:52px;height:52px;font-size:16px">${u.nama.replace(/Bdn\. |Dr\. /g,'').split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase()}</div>
+      <div>
+        <p style="font-size:16px;font-weight:700">${u.nama}</p>
+        <p style="font-size:12px;color:var(--t3);margin-top:2px">${u.role==='owner'?'👑 Owner / Pemilik':'🩺 Pegawai / Bidan'}</p>
+        <p style="font-size:12px;color:var(--t3)">Username: <code style="background:var(--bg);border:1px solid var(--bd);padding:1px 5px;border-radius:4px">${u.username}</code></p>
+      </div>
+    </div>
+    ${b?`<table><tr><th>Jabatan</th><td>${b.jab}</td></tr><tr><th>No. STR</th><td>${b.str||'-'}</td></tr><tr><th>Jadwal</th><td>${b.hari||'-'}, ${b.jam||'-'}</td></tr><tr><th>HP</th><td>${b.hp||'-'}</td></tr><tr><th>Total Kunjungan</th><td>${jK} kunjungan</td></tr></table>`:`<p style="font-size:12px;color:var(--t3)">Akun owner tidak terhubung ke data bidan.</p>`}
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--bd)">
+      <button class="btn p" onclick="openChPass('${u.id}')">🔑 Ganti Password</button>
+    </div>
+  </div>
+  ${isOwner()?`<div class="sec"><div class="sh"><h3>Pengaturan Klinik</h3></div>
+  <div class="sec" style="margin-bottom:12px">
+    <div class="sh"><h3>Profil Pemilik (Owner)</h3></div>
+    <div class="fg"><label>Nama Lengkap Owner</label>
+      <input id="owner-name-input" value="${u.nama}">
+    </div>
+    <button class="btn p" onclick="saveNamaOwner()">✓ Simpan Nama Owner</button>
+  </div>
+  
+  
+  
+    <div class="fg"><label>Nama Klinik</label><input id="info-nama" value="${DB.info?.nama||''}"></div>
+    <div class="fg"><label>Alamat</label><input id="info-alamat" value="${DB.info?.alamat||''}"></div>
+    <div class="fg"><label>Telepon</label><input id="info-telp" value="${DB.info?.telp||''}"></div>
+    <div class="fg"><label>Tagline / Keterangan</label><input id="info-tag" value="${DB.info?.tagline||''}"></div>
+    <button class="btn p" onclick="saveInfoKlinik()">✓ Simpan Pengaturan</button>
+  </div>`:''}`;
+}
+
+function saveInfoKlinik() {
+    // 1. Ambil input dari form
+    DB.info = {
+        nama: document.getElementById('info-nama').value,
+        alamat: document.getElementById('info-alamat').value,
+        telp: document.getElementById('info-telp').value,
+        tagline: document.getElementById('info-tag').value
+    };
+
+    // 2. Simpan ke LocalStorage
+    stSet(SK, DB);
+    
+    // 3. Tampilkan pesan berhasil
+    showNotif('✓ Pengaturan klinik disimpan');
+
+    // 4. PENTING: Refresh halaman agar Nama Klinik di Login & Dashboard berubah
+    setTimeout(() => {
+        location.reload();
+    }, 1000); // Memberi jeda 1 detik agar user sempat melihat notifikasi
+}
+
+function openChPass(uid) { document.getElementById('cp-uid').value=uid; ['cp-old','cp-new','cp-conf'].forEach(id=>document.getElementById(id).value=''); openM('m-chpass'); }
+function saveChPass() {
+  const uid=document.getElementById('cp-uid').value;
+  const oldp=document.getElementById('cp-old').value;
+  const newp=document.getElementById('cp-new').value;
+  const conf=document.getElementById('cp-conf').value;
+  const u=USERS.find(x=>x.id===uid);
+  if(!u){return;}
+  if(u.password!==oldp){showNotif('Password lama salah!',false);return;}
+  if(newp.length<6){showNotif('Password baru min. 6 karakter!',false);return;}
+  if(newp!==conf){showNotif('Konfirmasi password tidak cocok!',false);return;}
+  u.password=newp;
+  SESSION.password=newp;
+  cloudSet_users();
+  closeM('m-chpass'); showNotif('✓ Password berhasil diganti');
+}
+async function cloudSet_users(){try{await stSet(SK_U,USERS);if(window.storage)await window.storage.set(SK_U,JSON.stringify(USERS),true).catch(()=>{});}catch(e){}}
+
+// ============================================================
+// PENDAFTARAN & ANTRIAN
+// ============================================================
+let _dTab='baru';
+function openDaftar() {
+  // 1. Tarik data Bidan Aktif
+  const selBidan = document.getElementById('d-bidan');
+  selBidan.innerHTML = DB.bidan.filter(b=>b.status==='Aktif').map(b=>`<option value="${b.id}">${b.nama.replace('Bdn. ','').split(',')[0]}</option>`).join('');
+
+  // 2. Tarik data Layanan / Tindakan (SINKRONISASI BARU)
+  const selLayanan = document.getElementById('d-layanan');
+  if (DB.hargaTindakan && DB.hargaTindakan.length > 0) {
+      selLayanan.innerHTML = DB.hargaTindakan.map(h => `<option value="${h.nama}">${h.nama}</option>`).join('');
+  }
+
+  // 3. Reset formulir
+  swDaftar('baru');
+  ['dn-nama','dn-nik','dn-hp','dn-alamat','d-keluhan','dl-cari'].forEach(id=>{
+      const e=document.getElementById(id);
+      if(e) e.value='';
+  });
+  
+  document.getElementById('dl-res').innerHTML='';
+  document.getElementById('dl-pid').value='';
+  document.getElementById('dn-tgl').value='';
+  
+  // Buka Modal
+  openM('m-daftar');
+}
+
+function swDaftar(t) {
+  _dTab=t;
+  document.getElementById('dt-baru').classList.toggle('act',t==='baru');
+  document.getElementById('dt-lama').classList.toggle('act',t==='lama');
+  document.getElementById('reg-baru').style.display=t==='baru'?'':'none';
+  document.getElementById('reg-lama').style.display=t==='lama'?'':'none';
+}
+function cariReg(q) {
+  const d=document.getElementById('dl-res');
+  if(!q){d.innerHTML='';return;}
+  const res=DB.pasien.filter(p=>p.nama.toLowerCase().includes(q.toLowerCase())||(p.nik||'').includes(q));
+  d.innerHTML=res.length===0?'<p style="font-size:12px;color:var(--t3);padding:10px">Tidak ditemukan</p>':res.map(p=>`<div onclick="pilihReg(${p.id},'${p.nama.replace(/'/g,"\\'")}') " style="padding:9px 11px;cursor:pointer;border:1px solid var(--bd);border-radius:var(--r);margin-bottom:4px;background:#fff;transition:.1s" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='#fff'"><p style="font-weight:700;font-size:12.5px">${p.nama}</p><p style="font-size:11px;color:var(--t3)">${p.nik||'–'} · ${p.jaminan}</p></div>`).join('');
+}
+function pilihReg(id,nama) {
+  document.getElementById('dl-pid').value=id;
+  document.getElementById('dl-cari').value=nama;
+  document.getElementById('dl-res').innerHTML=`<div style="padding:9px;background:var(--gl);border-radius:var(--r);font-size:12px;color:var(--gd);font-weight:600">✓ Dipilih: ${nama}</div>`;
+}
+function saveDaftar() {
+  let pid;
+  if(_dTab==='baru'){
+    const nama=document.getElementById('dn-nama').value.trim();
+    if(!nama){showNotif('Nama pasien wajib diisi!',false);return;}
+    const np={id:DB.ids.p++,nama,nik:document.getElementById('dn-nik').value,tgl:document.getElementById('dn-tgl').value,hp:document.getElementById('dn-hp').value,gol:document.getElementById('dn-gol').value,jaminan:document.getElementById('dn-jam').value,alamat:document.getElementById('dn-alamat').value};
+    DB.pasien.push(np); pid=np.id;
+  }else{
+    pid=parseInt(document.getElementById('dl-pid').value);
+    if(!pid){showNotif('Pilih pasien terlebih dahulu!',false);return;}
+  }
+  const no=DB.antrian.filter(a=>a.tgl===today()).length+1;
+  const bid=parseInt(document.getElementById('d-bidan').value)||DB.bidan[0]?.id;
+  DB.antrian.push({id:DB.ids.a++,pasienId:pid,bidanId:bid,noAntrian:no,layanan:document.getElementById('d-layanan').value,keluhan:document.getElementById('d-keluhan').value,tgl:today(),status:'Menunggu',kunjunganId:null});
+  scheduleSave(); closeM('m-daftar'); render();
+  showNotif('✓ Pasien berhasil didaftarkan ke antrian');
+}
+function batalAntrian(id) {
+  if(!confirm('Batalkan antrian ini?'))return;
+  const i=DB.antrian.findIndex(x=>x.id===id);
+  DB.antrian[i].status='Batal';
+  scheduleSave(); render(); showNotif('Antrian dibatalkan');
+}
+
+// ============================================================
+// PEMERIKSAAN
+// ============================================================
+function openPeriksa(aid) {
+  const a=DB.antrian.find(x=>x.id===aid);
+  const p=DB.pasien.find(x=>x.id===a.pasienId);
+  document.getElementById('pr-aid').value=aid;
+  document.getElementById('mp-t').textContent=`Periksa: ${p?p.nama:'–'} — ${a.layanan}`;
+  ['pr-bb','pr-tb','pr-td','pr-suhu','pr-nadi','pr-uk','pr-cat','pr-tind', 'pr-diskon'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.value='';
+  });
+  document.getElementById('resep-rows').innerHTML='';
+  openM('m-periksa');
+  
+  // TAMBAHKAN BARIS INI:
+  hitungEstimasiBiaya(); 
+}
+
+
+
+
+function addResepRow() {
+  const idRow = 'rx-' + Date.now();
+  const d = document.createElement('div');
+  d.className = 'resep-row'; // Penanda khusus baris resep
+  d.style.cssText = 'display:grid;grid-template-columns:2fr 1fr 75px auto;gap:6px;margin-bottom:6px;align-items:start';
+
+  // Kita ganti <select> dengan <input> yang memiliki kotak pencarian melayang (dropdown custom)
+  d.innerHTML = `
+    <div style="position:relative" id="${idRow}">
+      <input type="text" class="obat-search-input" placeholder="Ketik cari obat..." style="width:100%;padding:6px 9px;border:1px solid var(--bd2);border-radius:var(--r);font-size:12px;font-family:inherit" oninput="filterObat(this, '${idRow}')" onfocus="filterObat(this, '${idRow}')">
+      <input type="hidden" class="obat-id-val">
+      <div class="obat-list-drop" style="position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid var(--bd2);max-height:160px;overflow-y:auto;z-index:1000;display:none;box-shadow:var(--shm);border-radius:var(--r)"></div>
+    </div>
+    <input class="obat-dosis" placeholder="Dosis" style="padding:6px 9px;border:1px solid var(--bd2);border-radius:var(--r);font-size:12px;font-family:inherit;height:31px">
+   
+	<input class="obat-jml" type="number" value="1" min="1" oninput="hitungEstimasiBiaya()" style="padding:6px 9px;border:1px solid var(--bd2);border-radius:var(--r);font-size:12px;font-family:inherit;height:31px">
+
+	<button class="btn sm d" onclick="this.closest('.resep-row').remove(); hitungEstimasiBiaya();" style="padding:4px 8px;height:31px">✕</button>
+  `;
+  document.getElementById('resep-rows').appendChild(d);
+}
+function getResepRows() {
+  const res = [];
+  // Cari semua elemen yang memiliki class resep-row
+  document.querySelectorAll('.resep-row').forEach(row => {
+    // Ambil ID obat dari input tersembunyi
+    const idVal = row.querySelector('.obat-id-val').value;
+    const oid = parseInt(idVal);
+    
+    if (oid) {
+      const dosis = row.querySelector('.obat-dosis').value.trim();
+      const jml = parseInt(row.querySelector('.obat-jml').value) || 1;
+      res.push({ obatId: oid, dosis: dosis, jml: jml });
+    }
+  });
+  return res;
+}
+
+function savePeriksa() {
+  const aid = parseInt(document.getElementById('pr-aid').value);
+  const a = DB.antrian.find(x => x.id === aid);
+  const resep = getResepRows();
+
+  // 1. Ambil nilai diskon dari input
+  const discVal = parseInt(document.getElementById('pr-diskon').value) || 0;
+
+  // 2. Simpan data kunjungan dengan status diskonACC: false
+  const k = {
+    id: DB.ids.k++,
+    pasienId: a.pasienId,
+    bidanId: a.bidanId,
+    layanan: a.layanan,
+    tgl: today(),
+    bb: document.getElementById('pr-bb').value,
+    tb: document.getElementById('pr-tb').value,
+    td: document.getElementById('pr-td').value,
+    suhu: document.getElementById('pr-suhu').value,
+    nadi: document.getElementById('pr-nadi').value,
+    uk: document.getElementById('pr-uk').value,
+    cat: document.getElementById('pr-cat').value,
+    tind: document.getElementById('pr-tind').value,
+    resep: resep,
+    diskon: discVal,
+    diskonACC: discVal > 0 ? false : true // Jika ada diskon, status false (menunggu Owner)
+  };
+
+  DB.kunjungan.push(k);
+  const ai = DB.antrian.findIndex(x => x.id === aid);
+  DB.antrian[ai].status = 'Selesai';
+  DB.antrian[ai].kunjunganId = k.id;
+
+  scheduleSave();
+  closeM('m-periksa');
+  render();
+
+  // 3. Logika Cetak: Jangan langsung cetak jika ada diskon
+  if (discVal > 0) {
+    alert('Pengajuan diskon telah dikirim ke Owner. Mohon tunggu persetujuan Owner sebelum mencetak struk.');
+  } else {
+    if (confirm('Pemeriksaan selesai. Cetak struk sekarang?')) {
+      cetakStrukBiaya(k.id);
+    }
+  }
+}
+
+function cetakDari(src) {
+  if (src === 'periksa') {
+    const aid = parseInt(document.getElementById('pr-aid').value);
+    const a = DB.antrian.find(x => x.id === aid);
+    const p = DB.pasien.find(x => x.id === a.pasienId);
+    const bd = DB.bidan.find(x => x.id === a.bidanId);
+    buildResep({
+      pasien: p,
+      bidan: bd,
+      layanan: a.layanan,
+      tgl: today(),
+      resep: getResepRows(),
+      cat: document.getElementById('pr-cat').value,
+      tind: document.getElementById('pr-tind').value,
+      td: document.getElementById('pr-td').value,
+      bb: document.getElementById('pr-bb').value,
+      uk: document.getElementById('pr-uk').value
+    });
+  }
+}
+function lihatResep(kId) {
+  const k=DB.kunjungan.find(x=>x.id===kId);
+  if(!k){showNotif('Data tidak ditemukan',false);return;}
+  const p=DB.pasien.find(x=>x.id===k.pasienId);
+  const bd=DB.bidan.find(x=>x.id===k.bidanId);
+  buildResep({pasien:p,bidan:bd,layanan:k.layanan,tgl:k.tgl,resep:k.resep||[],cat:k.cat,tind:k.tind,td:k.td,bb:k.bb,uk:k.uk});
+}
+function buildResep({pasien,bidan,layanan,tgl,resep,cat,tind,td,bb,uk}) {
+  const info=DB.info||{};
+  const bn=bidan?bidan.nama.replace('Bdn. ','').split(',')[0]:'-';
+  const oH=resep.length===0?'<p style="font-style:italic;color:#888;margin:8px 0">Tidak ada resep obat</p>':resep.map((r,i)=>{const o=DB.obat.find(x=>x.id===r.obatId);return `<div style="margin-bottom:10px;padding-left:4px;border-left:2px solid #333"><strong>${i+1}. ${o?o.nama:'Obat tidak ditemukan'}</strong><br><span style="color:#555">Dosis: ${r.dosis||'–'} &nbsp;·&nbsp; Jumlah: ${r.jml} ${o?o.sat:''}</span></div>`;}).join('');
+  document.getElementById('resep-content').innerHTML=`
+    <div style="text-align:center;margin-bottom:14px;padding-bottom:12px;border-bottom:2px solid #000">
+      <strong style="font-size:17px;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.01em">${info.nama||'KLINIK BIDAN SEHAT'}</strong>
+      <div style="font-size:11px;margin-top:4px">${info.alamat||'Jl. Kesehatan No.1'}</div>
+      <div style="font-size:11px">Telp: ${info.telp||'-'} &nbsp;·&nbsp; ${info.tagline||'Praktik Kebidanan'}</div>
+    </div>
+    <table style="width:100%;font-size:11.5px;margin-bottom:10px;border-collapse:collapse">
+      <tr><td style="padding:2px 0;width:50%"><strong>Nama Pasien:</strong> ${pasien?pasien.nama:'–'}</td><td style="padding:2px 0"><strong>Tanggal:</strong> ${tgl}</td></tr>
+      <tr><td style="padding:2px 0"><strong>Layanan:</strong> ${layanan}</td><td style="padding:2px 0"><strong>Jaminan:</strong> ${pasien?pasien.jaminan:'–'}</td></tr>
+      ${td?`<tr><td style="padding:2px 0"><strong>Tekanan Darah:</strong> ${td} mmHg</td><td style="padding:2px 0">${bb?`<strong>Berat Badan:</strong> ${bb} kg`:''}</td></tr>`:''}
+      ${uk?`<tr><td style="padding:2px 0" colspan="2"><strong>Usia Kehamilan:</strong> ${uk}</td></tr>`:''}
+    </table>
+    ${tind?`<div style="margin-bottom:10px;font-size:11.5px;padding:8px;background:#f9fafb;border-radius:4px"><strong>Tindakan:</strong> ${tind}</div>`:''}
+    <hr style="border:none;border-top:1px dashed #aaa;margin:10px 0">
+    <strong style="font-size:11.5px;letter-spacing:.1em;display:block;margin-bottom:10px">R  /</strong>
+    ${oH}
+    <hr style="border:none;border-top:1px dashed #aaa;margin:10px 0">
+    <div style="font-size:11.5px;margin-bottom:16px"><strong>Catatan:</strong> ${cat||'–'}</div>
+    <div style="text-align:right;margin-top:24px;font-size:12px">
+      <p>${tgl}</p><br>
+      <p><strong>${bn}</strong></p>
+      <p style="font-size:10px;color:#666">${bidan?'STR: '+(bidan.str||'–'):''}</p>
+    </div>`;
+  openM('m-resep');
+}
+function printResep() {
+  const c=document.getElementById('resep-content').innerHTML;
+  const w=window.open('','_blank','width=620,height=850');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Resep - ${DB.info?.nama||'Klinik'}</title><style>@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');body{font-family:'DM Mono',monospace;font-size:12px;padding:24px;color:#111;max-width:580px;margin:0 auto}strong{font-weight:700}@media print{body{padding:12px}}</style></head><body>${c}</body></html>`);
+  w.document.close(); setTimeout(()=>w.print(),500);
+}
+
+// ============================================================
+// PASIEN CRUD
+// ============================================================
+function clearPasienM(){document.getElementById('mp2-t').textContent='Tambah Pasien';document.getElementById('p-eid').value='';['p-nama','p-nik','p-hp','p-alamat'].forEach(id=>document.getElementById(id).value='');document.getElementById('p-tgl').value='';}
+function editPasien(id){const p=DB.pasien.find(x=>x.id===id);document.getElementById('mp2-t').textContent='Edit Pasien';document.getElementById('p-eid').value=id;document.getElementById('p-nama').value=p.nama;document.getElementById('p-nik').value=p.nik||'';document.getElementById('p-tgl').value=p.tgl||'';document.getElementById('p-hp').value=p.hp||'';document.getElementById('p-gol').value=p.gol||'A';document.getElementById('p-jam').value=p.jaminan||'Umum';document.getElementById('p-alamat').value=p.alamat||'';openM('m-pasien');}
+function hapusPasien(id){if(!confirm('Hapus pasien ini beserta riwayat kunjungannya?'))return;DB.pasien=DB.pasien.filter(x=>x.id!==id);DB.kunjungan=DB.kunjungan.filter(x=>x.pasienId!==id);scheduleSave();render();showNotif('✓ Pasien dihapus');}
+function savePasien(){const nama=document.getElementById('p-nama').value.trim();if(!nama){showNotif('Nama wajib diisi!',false);return;}const eid=document.getElementById('p-eid').value;const d={nama,nik:document.getElementById('p-nik').value,tgl:document.getElementById('p-tgl').value,hp:document.getElementById('p-hp').value,gol:document.getElementById('p-gol').value,jaminan:document.getElementById('p-jam').value,alamat:document.getElementById('p-alamat').value};if(eid){const i=DB.pasien.findIndex(x=>x.id===parseInt(eid));DB.pasien[i]={...DB.pasien[i],...d};}else{DB.pasien.push({id:DB.ids.p++,...d});}scheduleSave();closeM('m-pasien');render();showNotif('✓ Data pasien disimpan');}
+function showRiwayat(id){const p=DB.pasien.find(x=>x.id===id);const kvs=DB.kunjungan.filter(k=>k.pasienId===id).slice().reverse();document.getElementById('mr-t').textContent='Riwayat: '+p.nama;const rows=kvs.map(k=>{const bd=DB.bidan.find(x=>x.id===k.bidanId);const ol=(k.resep||[]).map(r=>{const o=DB.obat.find(x=>x.id===r.obatId);return o?o.nama:'-';}).join(', ');return `<tr><td>${k.tgl}</td><td><span class="badge bb2">${k.layanan}</span></td><td>${k.td||'-'}</td><td>${k.bb||'-'} kg</td><td style="color:var(--t3)">${bd?bd.nama.replace('Bdn. ','').split(',')[0]:'-'}</td><td style="font-size:11px;color:var(--t3);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${ol||'-'}</td><td><button class="btn sm" onclick="lihatResep(${k.id})">Resep</button></td></tr>`;}).join('');document.getElementById('mr-content').innerHTML=kvs.length===0?'<p style="text-align:center;color:var(--t3);padding:24px">Belum ada kunjungan tercatat</p>':`<div class="tbl-wrap"><table><tr><th>Tgl</th><th>Layanan</th><th>TD</th><th>BB</th><th>Bidan</th><th>Obat</th><th></th></tr>${rows}</table></div>`;openM('m-riwayat');}
+
+// ============================================================
+// OBAT CRUD
+// ============================================================
+function clearObatM(){document.getElementById('mo-t').textContent='Tambah Obat';document.getElementById('o-eid').value='';['o-nama','o-stok','o-min','o-exp','o-prod','o-hb','o-hj'].forEach(id=>document.getElementById(id).value='');}
+function editObat(id){const o=DB.obat.find(x=>x.id===id);document.getElementById('mo-t').textContent='Edit Obat';document.getElementById('o-eid').value=id;document.getElementById('o-nama').value=o.nama;document.getElementById('o-kat').value=o.kat;document.getElementById('o-stok').value=o.stok;document.getElementById('o-min').value=o.stokMin;document.getElementById('o-sat').value=o.sat;document.getElementById('o-exp').value=o.exp||'';document.getElementById('o-prod').value=o.prod||'';document.getElementById('o-hb').value=o.hb;document.getElementById('o-hj').value=o.hj;openM('m-obat');}
+function hapusObat(id){if(!confirm('Hapus obat ini?'))return;DB.obat=DB.obat.filter(x=>x.id!==id);scheduleSave();render();showNotif('✓ Obat dihapus');}
+function saveObat(){const nama=document.getElementById('o-nama').value.trim();if(!nama){showNotif('Nama obat wajib!',false);return;}const eid=document.getElementById('o-eid').value;const d={nama,kat:document.getElementById('o-kat').value,stok:parseInt(document.getElementById('o-stok').value)||0,stokMin:parseInt(document.getElementById('o-min').value)||10,sat:document.getElementById('o-sat').value,exp:document.getElementById('o-exp').value,prod:document.getElementById('o-prod').value,hb:parseInt(document.getElementById('o-hb').value)||0,hj:parseInt(document.getElementById('o-hj').value)||0};if(eid){const i=DB.obat.findIndex(x=>x.id===parseInt(eid));DB.obat[i]={...DB.obat[i],...d};}else{DB.obat.push({id:DB.ids.o++,...d});}scheduleSave();closeM('m-obat');render();showNotif('✓ Data obat disimpan');}
+function openStok(id){const o=DB.obat.find(x=>x.id===id);document.getElementById('st-id').value=id;document.getElementById('st-info').textContent=`${o.nama} — Stok saat ini: ${o.stok} ${o.sat}`;document.getElementById('st-jml').value='';document.getElementById('st-exp').value=o.exp||'';document.getElementById('st-hb').value='';document.getElementById('st-ket').value='';openM('m-stok');}
+function saveStok(){const id=parseInt(document.getElementById('st-id').value);const jml=parseInt(document.getElementById('st-jml').value)||0;if(jml<=0){showNotif('Jumlah harus lebih dari 0!',false);return;}const i=DB.obat.findIndex(x=>x.id===id);DB.obat[i].stok+=jml;if(document.getElementById('st-exp').value)DB.obat[i].exp=document.getElementById('st-exp').value;if(document.getElementById('st-hb').value)DB.obat[i].hb=parseInt(document.getElementById('st-hb').value);DB.txObat.push({id:DB.ids.tx++,obatId:id,jenis:'Masuk',jml,tgl:today(),ket:document.getElementById('st-ket').value||'Restok gudang'});scheduleSave();closeM('m-stok');render();showNotif(`✓ Stok ditambahkan ${jml} unit`);}
+
+// ============================================================
+// BIDAN CRUD
+// ============================================================
+function clearBidanM(){document.getElementById('mb-t').textContent='Tambah Pegawai';document.getElementById('b-eid').value='';['b-nama','b-user','b-str','b-hp','b-hari','b-jam','b-pass','b-cat'].forEach(id=>document.getElementById(id).value='');document.getElementById('b-status').value='Aktif';}
+function editBidan(id){const b=DB.bidan.find(x=>x.id===id);const u=USERS.find(x=>x.bidanId===id);document.getElementById('mb-t').textContent='Edit Pegawai';document.getElementById('b-eid').value=id;document.getElementById('b-nama').value=b.nama;document.getElementById('b-user').value=u?u.username:'';document.getElementById('b-str').value=b.str||'';document.getElementById('b-hp').value=b.hp||'';document.getElementById('b-jab').value=b.jab;document.getElementById('b-status').value=b.status;document.getElementById('b-hari').value=b.hari||'';document.getElementById('b-jam').value=b.jam||'';document.getElementById('b-pass').value='';document.getElementById('b-cat').value=b.cat||'';openM('m-bidan');}
+function hapusBidan(id){if(!confirm('Hapus pegawai ini? Akun loginnya juga akan dihapus.'))return;DB.bidan=DB.bidan.filter(x=>x.id!==id);USERS=USERS.filter(u=>u.bidanId!==id);cloudSet_users();scheduleSave();render();showNotif('✓ Pegawai dihapus');}
+function saveBidan() {
+  const nama = document.getElementById('b-nama').value.trim();
+  const user = document.getElementById('b-user').value.trim().toLowerCase();
+  const pass = document.getElementById('b-pass').value;
+  
+  if (!nama || !user) {
+    showNotif('Nama dan username wajib diisi!', false);
+    return;
+  }
+  
+  const eid = document.getElementById('b-eid').value;
+  const bd = {
+    nama,
+    str: document.getElementById('b-str').value,
+    hp: document.getElementById('b-hp').value,
+    jab: document.getElementById('b-jab').value,
+    hari: document.getElementById('b-hari').value,
+    jam: document.getElementById('b-jam').value,
+    status: document.getElementById('b-status').value,
+    cat: document.getElementById('b-cat').value
+  };
+
+  if (eid) {
+    // Logika Edit Pegawai Lama
+    const i = DB.bidan.findIndex(x => x.id === parseInt(eid));
+    DB.bidan[i] = { ...DB.bidan[i], ...bd };
+    const ui = USERS.findIndex(u => u.bidanId === parseInt(eid));
+    if (ui >= 0) {
+      USERS[ui].username = user;
+      USERS[ui].nama = nama;
+      if (pass && pass.length >= 6) USERS[ui].password = pass;
+    }
+  } else {
+    // Logika Tambah Pegawai Baru
+    if (!pass || pass.length < 6) {
+      showNotif('Password min. 6 karakter untuk pegawai baru!', false);
+      return;
+    }
+    if (USERS.find(u => u.username === user)) {
+      showNotif('Username sudah digunakan!', false);
+      return;
+    }
+
+    // --- LOGIKA MASA AKTIF OTOMATIS ---
+    // Mengambil masa aktif dari akun owner agar sinkron
+    const ownerAccount = USERS.find(u => u.role === 'owner');
+    const tglAktif = ownerAccount ? ownerAccount.masaAktif : today();
+
+    const nid = DB.ids.b++;
+    DB.bidan.push({ id: nid, ...bd });
+
+    // Tambah akun login baru dengan masa aktif
+    USERS.push({
+      id: 'u' + Date.now(),
+      username: user,
+      password: pass,
+      role: 'pegawai',
+      nama: nama,
+      bidanId: nid,
+      masaAktif: tglAktif // Pegawai baru langsung aktif sesuai durasi Owner
+    });
+  }
+  
+  cloudSet_users();
+  scheduleSave();
+  closeM('m-bidan');
+  render();
+  showNotif('✓ Data pegawai disimpan');
+}
+
+// ============================================================
+// CLOSE ON BG CLICK
+// ============================================================
+// Fungsi navigasi dan manajemen harga
+// ============================================================
+// CLOSE ON BG CLICK
+// ============================================================
+// Fungsi navigasi dan manajemen harga
+function navObat(type) {
+  document.getElementById('obat-stok-sec').style.display = type === 'stok' ? 'block' : 'none';
+  document.getElementById('obat-harga-sec').style.display = type === 'harga' ? 'block' : 'none';
+  const tabs = document.querySelectorAll('.tabs .tab');
+  tabs[0].classList.toggle('act', type === 'stok');
+  tabs[1].classList.toggle('act', type === 'harga');
+}
+
+function editHarga(id) {
+  const h = DB.hargaTindakan.find(x => x.id === id);
+  const nHarga = prompt(`Masukkan Harga Total baru untuk ${h.nama}:`, h.harga);
+  if (nHarga === null) return;
+  
+  const nJasa = prompt(`Masukkan nominal Jasa untuk Pegawai (${h.nama}):`, h.jasa || 0);
+  if (nJasa === null) return;
+
+  h.harga = parseInt(nHarga) || 0;
+  h.jasa = parseInt(nJasa) || 0; 
+  
+  scheduleSave(); 
+  render();
+  
+  // PERBAIKAN: Kunci posisi ke tab harga setelah render ulang selesai
+  navObat('harga'); 
+  showNotif('✓ Harga & Jasa diperbarui');
+}
+
+function hapusHargaTindakan(id) {
+  const h = DB.hargaTindakan.find(x => x.id === id);
+  if (!h) return;
+
+  if (confirm(`Hapus layanan "${h.nama}" dari daftar harga?`)) {
+    DB.hargaTindakan = DB.hargaTindakan.filter(x => x.id !== id);
+    
+    scheduleSave(); 
+    render(); 
+    
+    // PERBAIKAN: Kunci posisi ke tab harga setelah render ulang selesai
+    navObat('harga'); 
+    showNotif('✓ Layanan berhasil dihapus');
+  }
+}
+
+function tambahHargaTindakan() {
+  const nama = prompt("Nama Tindakan/Layanan baru:");
+  if (!nama) return;
+
+  const harga = prompt(`Harga Total untuk ${nama} (Rp):`);
+  if (harga === null) return;
+
+  const jasa = prompt(`Nominal Jasa Pegawai untuk ${nama} (Rp):`, 0);
+  if (jasa === null) return;
+
+  DB.hargaTindakan.push({
+    id: DB.ids.ht++, 
+    nama: nama, 
+    harga: parseInt(harga) || 0,
+    jasa: parseInt(jasa) || 0 
+  });
+
+  scheduleSave(); 
+  render();
+  
+  // PERBAIKAN: Kunci posisi ke tab harga setelah render ulang selesai
+  navObat('harga'); 
+  showNotif('✓ Layanan baru ditambahkan');
+}
+
+document.querySelectorAll('.ov').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+// ============================================================
+// CLOCK
+// ============================================================
+setInterval(()=>{
+  const d=new Date();
+  const cel=document.getElementById('clock-el');
+  const del=document.getElementById('date-el');
+  if(cel)cel.textContent=d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' WIB';
+  if(del)del.textContent=d.toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+},1000);
+
+// ============================================================
+// INIT
+// ============================================================
+(async()=>{
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('app-shell').style.display='none';
+  await cloudLoad();
+  document.getElementById('lsync').innerHTML='<span style="color:var(--g);font-weight:600">✓ Sistem siap. Silakan login.</span>';
+})();
+
+
+
+
+// ... kode-kode sebelumnya ...
+
+// --- TEMPEL KODE FUNGSI CETAK DI SINI ---
+
+function cetakStrukBiaya(kId) {
+  const k = DB.kunjungan.find(x => x.id === kId);
+  const p = DB.pasien.find(x => x.id === k.pasienId);
+  const bd = DB.bidan.find(x => x.id === k.bidanId);
+  const info = DB.info || {};
+  const hLayanan = DB.hargaTindakan.find(x => x.nama === k.layanan);
+  const biayaLayanan = hLayanan ? hLayanan.harga : 0;
+  
+  let rincianObatHtml = '';
+  let totalObat = 0;
+
+  if(k.resep && k.resep.length > 0) {
+    k.resep.forEach(r => {
+      const o = DB.obat.find(x => x.id === r.obatId);
+      const sub = o ? o.hj * r.jml : 0;
+      totalObat += sub;
+      rincianObatHtml += `
+        <tr>
+          <td style="padding:4px 0">${o ? o.nama : 'Obat'} (x${r.jml})</td>
+          <td style="text-align:right">Rp${fmt(sub)}</td>
+        </tr>`;
+    });
+  }
+
+  const diskonFinal = k.diskonACC ? (k.diskon || 0) : 0;
+  const totalTagihan = biayaLayanan + totalObat - diskonFinal;
+
+  const isiStruk = `
+    <div style="text-align:center; margin-bottom:14px; padding-bottom:12px; border-bottom:2px solid #000">
+      <strong style="font-size:16px; font-family:'Plus Jakarta Sans',sans-serif;">${info.nama || 'KLINIK BIDAN SEHAT'}</strong>
+      <div style="font-size:11px; margin-top:4px">${info.alamat || '-'}</div>
+      <div style="font-size:11px">Telp: ${info.telp || '-'} &nbsp;·&nbsp; ${info.tagline || '-'}</div>
+    </div>
+    
+    <div style="text-align:center; text-transform:uppercase; font-weight:bold; letter-spacing:2px; margin-bottom:15px; font-size:13px">Kuitansi Pembayaran</div>
+
+    <table style="width:100%; font-size:11.5px; margin-bottom:15px">
+      <tr><td style="width:50%"><strong>Nama Pasien:</strong> ${p ? p.nama : '–'}</td><td style="text-align:right"><strong>Tanggal:</strong> ${k.tgl}</td></tr>
+      <tr><td><strong>No. Registrasi:</strong> #K${k.id}</td><td style="text-align:right"><strong>Jaminan:</strong> ${p ? p.jaminan : '–'}</td></tr>
+    </table>
+
+    <table style="width:100%; font-size:12px; border-collapse:collapse">
+      <tr style="border-bottom:1px solid #000; border-top:1px solid #000">
+        <th style="text-align:left; padding:8px 0">Deskripsi Layanan/Item</th>
+        <th style="text-align:right; padding:8px 0">Subtotal</th>
+      </tr>
+      <tr>
+        <td style="padding:8px 0">${k.layanan}</td>
+        <td style="text-align:right">Rp${fmt(biayaLayanan)}</td>
+      </tr>
+      ${rincianObatHtml}
+      ${diskonFinal > 0 ? `
+      <tr style="color:#dc2626">
+        <td style="padding:4px 0">Diskon Khusus (Owner ACC)</td>
+        <td style="text-align:right">-Rp${fmt(diskonFinal)}</td>
+      </tr>` : ''}
+      <tr style="border-top:2px solid #000">
+        <td style="padding:10px 0; font-weight:bold; font-size:14px">TOTAL BAYAR</td>
+        <td style="padding:10px 0; text-align:right; font-weight:bold; font-size:14px">Rp${fmt(totalTagihan)}</td>
+      </tr>
+    </table>
+
+    <div style="margin-top:30px; display:flex; justify-content:space-between; align-items:flex-end">
+      <div style="font-size:10px; font-style:italic; color:#666">
+        * Dicetak otomatis oleh Sistem Online Klinik<br>
+        * Harap simpan sebagai bukti pembayaran sah
+      </div>
+      <div style="text-align:center; font-size:11.5px">
+        Kasir/Bidan,<br><br><br><br>
+        <strong>${bd ? bd.nama.split(',')[0] : '-'}</strong>
+      </div>
+    </div>
+  `;
+
+  const win = window.open('', '_blank', 'width=650,height=850');
+  win.document.write(`
+    <html>
+      <head>
+        <title>Struk Pembayaran - ${p ? p.nama : ''}</title>
+        <style>
+          @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=DM+Mono&display=swap');
+          body { font-family:'Plus Jakarta Sans', sans-serif; padding:40px; color:#111; line-height:1.4; }
+          table { font-family:'DM Mono', monospace; }
+          @media print { body { padding:10px; } }
+        </style>
+      </head>
+      <body onload="window.print();window.close()">${isiStruk}</body>
+    </html>
+  `);
+  win.document.close();
+}
+
+
+function pgBiaya() {
+  if(!isOwner()) return lockedPage();
+  
+  // Menambahkan tombol Edit di kolom Aksi
+  const rows = (DB.biaya || []).slice().reverse().map(b => `
+    <tr>
+      <td>${b.tgl}</td>
+      <td><span class="badge bgy">${b.kat}</span></td>
+      <td>${b.ket}</td>
+      <td style="color:var(--re); font-weight:600">- Rp${fmt(b.jumlah)}</td>
+      <td>
+        <button class="btn sm" onclick="editBiaya(${b.id})">Edit</button>
+        <button class="btn sm d" onclick="hapusBiaya(${b.id})">Hapus</button>
+      </td>
+    </tr>`).join('');
+
+  return `
+    <div class="sec">
+      <div class="sh"><h3>Catat Pengeluaran Klinik</h3></div>
+      <div class="fr" style="background:var(--bg); padding:15px; border-radius:var(--r); margin-bottom:15px">
+        <!-- Input hidden untuk menyimpan ID saat edit -->
+        <input type="hidden" id="by-eid"> 
+        
+        <div class="fg"><label>Tanggal</label><input type="date" id="by-tgl" value="${today()}"></div>
+        <div class="fg"><label>Kategori</label><select id="by-kat">${(DB.kategoriBiaya || []).map(k=>`<option>${k}</option>`).join('')}</select></div>
+        <div class="fg"><label>Keterangan</label><input id="by-ket" placeholder="Misal: Listrik Mei"></div>
+        <div class="fg"><label>Jumlah (Rp)</label><input type="number" id="by-jml" placeholder="0"></div>
+        <button class="btn p" id="btn-save-biaya" style="align-self:flex-end; height:38px" onclick="saveBiaya()">Simpan Biaya</button>
+      </div>
+      <div class="tbl-wrap"><table><tr><th>Tgl</th><th>Kategori</th><th>Keterangan</th><th>Jumlah</th><th>Aksi</th></tr>${rows || '<tr><td colspan="5" style="text-align:center; padding:20px">Belum ada catatan biaya</td></tr>'}</table></div>
+    </div>`;
+}
+
+function saveBiaya() {
+  // Ambil ID dari input hidden
+  const eid = document.getElementById('by-eid').value;
+  const tgl = document.getElementById('by-tgl').value;
+  const kat = document.getElementById('by-kat').value;
+  const ket = document.getElementById('by-ket').value;
+  const jml = parseInt(document.getElementById('by-jml').value) || 0;
+
+  if (jml <= 0) return showNotif('Masukkan jumlah!', false);
+
+  // LOGIKA EDIT: Jika eid tidak kosong
+  if (eid && eid !== "") {
+    // Gunakan Number() untuk memastikan perbandingan ID akurat
+    const idx = DB.biaya.findIndex(x => x.id === Number(eid));
+    
+    if (idx !== -1) {
+      // Ganti data lama dengan data baru
+      DB.biaya[idx] = { 
+        ...DB.biaya[idx], 
+        tgl: tgl, 
+        kat: kat, 
+        ket: ket, 
+        jumlah: jml 
+      };
+      showNotif('✓ Biaya berhasil diperbarui');
+    }
+  } else {
+    // LOGIKA TAMBAH BARU
+    if (!DB.biaya) DB.biaya = [];
+    DB.biaya.push({
+      id: Date.now(), 
+      tgl: tgl, 
+      kat: kat, 
+      ket: ket, 
+      jumlah: jml
+    });
+    showNotif('✓ Biaya baru dicatat');
+  }
+
+  // Bersihkan ID setelah simpan agar tidak 'nyangkut' di mode edit terus[cite: 2]
+  document.getElementById('by-eid').value = "";
+  document.getElementById('btn-save-biaya').textContent = 'Simpan Biaya';
+
+  scheduleSave(); 
+  render(); 
+}
+
+function hapusBiaya(id) {
+  if (confirm('Apakah Anda yakin ingin menghapus data pengeluaran ini?')) {
+    // Menghapus data berdasarkan ID
+    DB.biaya = DB.biaya.filter(b => b.id !== id);
+    
+    // Simpan perubahan ke memori
+    scheduleSave(); 
+    
+    // Muat ulang tampilan dashboard dan tabel
+    render(); 
+    
+    showNotif('✓ Biaya berhasil dihapus');
+  }
+}
+
+function pgAccDiskon() {
+  if(!isOwner()) return lockedPage();
+  const pending = DB.kunjungan.filter(k => k.diskon > 0 && k.diskonACC === false);
+  
+  const rows = pending.map(k => {
+    const p = DB.pasien.find(x => x.id === k.pasienId);
+    return `
+      <tr>
+        <td>${k.tgl}</td>
+        <td><strong>${p ? p.nama : '-'}</strong></td>
+        <td>${k.layanan}</td>
+        <td style="color:var(--re); font-weight:700">Rp${fmt(k.diskon)}</td>
+        <td>
+          <button class="btn sm p" onclick="approveDiskon(${k.id}, true)">Setujui</button>
+          <button class="btn sm d" onclick="approveDiskon(${k.id}, false)">Tolak</button>
+        </td>
+      </tr>`;
+  }).join('');
+
+  return `
+    <div class="sec">
+      <div class="sh"><h3>Persetujuan Diskon Pasien</h3></div>
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>Tgl</th><th>Pasien</th><th>Layanan</th><th>Nominal Diskon</th><th>Aksi</th></tr>
+          ${rows || '<tr><td colspan="5" style="text-align:center; padding:20px">Tidak ada pengajuan diskon pending</td></tr>'}
+        </table>
+      </div>
+    </div>`;
+}
+
+function approveDiskon(kId, isAcc) {
+  const k = DB.kunjungan.find(x => x.id === kId);
+  if(isAcc) {
+    k.diskonACC = true;
+    showNotif('✓ Diskon disetujui');
+  } else {
+    k.diskon = 0;
+    k.diskonACC = true;
+    showNotif('✕ Diskon ditolak (harga kembali normal)');
+  }
+  scheduleSave(); render();
+}
+
+function editBiaya(id) {
+  const b = DB.biaya.find(x => x.id === id);
+  if(!b) return;
+
+  // Isi form dengan data yang akan diedit
+  document.getElementById('by-eid').value = b.id;
+  document.getElementById('by-tgl').value = b.tgl;
+  document.getElementById('by-kat').value = b.kat;
+  document.getElementById('by-ket').value = b.ket;
+  document.getElementById('by-jml').value = b.jumlah;
+  
+  // Ubah teks tombol menjadi "Update"
+  document.getElementById('btn-save-biaya').textContent = 'Update Biaya';
+  document.getElementById('by-ket').focus();
+}
+
+function saveBiaya() {
+  const eid = document.getElementById('by-eid').value;
+  const tgl = document.getElementById('by-tgl').value;
+  const kat = document.getElementById('by-kat').value;
+  const ket = document.getElementById('by-ket').value;
+  const jml = parseInt(document.getElementById('by-jml').value) || 0;
+
+  if(jml <= 0) return showNotif('Masukkan jumlah!', false);
+
+  if(eid) {
+    // Logika Update data lama
+    const idx = DB.biaya.findIndex(x => x.id == eid);
+    if(idx !== -1) {
+      DB.biaya[idx] = { ...DB.biaya[idx], tgl, kat, ket, jumlah: jml };
+      showNotif('✓ Biaya diperbarui');
+    }
+  } else {
+    // Logika Tambah data baru
+    if(!DB.biaya) DB.biaya = [];
+    DB.biaya.push({
+      id: Date.now(), 
+      tgl, kat, ket, jumlah: jml
+    });
+    showNotif('✓ Biaya dicatat');
+  }
+
+  scheduleSave(); 
+  render(); 
+}
+
+// Fungsi Khusus Developer untuk aktivasi ulang
+function aktivasiSistem(username, jumlahBulan) {
+  const uIdx = USERS.findIndex(x => x.username === username);
+  if (uIdx === -1) return console.error("User tidak ditemukan!");
+
+  const d = new Date();
+  d.setMonth(d.getMonth() + jumlahBulan);
+  const tglBaru = d.toISOString().slice(0, 10);
+
+  USERS[uIdx].masaAktif = tglBaru;
+  
+  // Simpan permanen ke storage[cite: 2]
+  stSet(SK_U, USERS); 
+  if (window.storage) window.storage.set(SK_U, JSON.stringify(USERS), true);
+  
+  console.log(`✅ BERHASIL! User ${username} diperpanjang hingga ${tglBaru}`);
+  alert(`Aktivasi Berhasil! Berlaku hingga ${tglBaru}. Silakan refresh.`);
+}
+
+// Pastikan kode ini ada di dalam file Anda:
+function aktivasiSemua(jumlahBulan) {
+  const d = new Date();
+  d.setMonth(d.getMonth() + jumlahBulan);
+  const tglBaru = d.toISOString().slice(0, 10);
+
+  USERS.forEach(u => {
+    u.masaAktif = tglBaru;
+  });
+
+  stSet(SK_U, USERS);
+  if (window.storage) window.storage.set(SK_U, JSON.stringify(USERS), true);
+
+  console.log(`✅ SEMUA akun diperpanjang hingga ${tglBaru}`);
+  alert(`Berhasil! Semua akun aktif hingga ${tglBaru}.`);
+}
+
+function downloadData(data, fileName) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName + "_" + today() + ".json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function pgBackup() {
+  // Pastikan hanya Owner yang bisa akses halaman ini
+  if(!isOwner()) return lockedPage();
+  
+  return `
+    <div class="sec">
+      <div class="sh"><h3>Manajemen Ekspor & Impor Data</h3></div>
+      
+      <div class="g2">
+        <!-- BLOK EKSPOR (EXCEL/CSV) -->
+        <div class="sc">
+          <div class="sl">EKSPOR DATA (EXCEL/CSV)</div>
+          <p style="font-size:11px; color:var(--t2); margin-bottom:12px">Unduh data per kategori untuk laporan atau pengolahan di Excel.</p>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px">
+            <button class="btn sm" onclick="eksExcel('pasien')">📥 Data Pasien</button>
+            <button class="btn sm" onclick="eksExcel('pegawai')">📥 Data Pegawai</button>
+            <button class="btn sm" onclick="eksExcel('obat')">📥 Stok Obat</button>
+            <button class="btn sm" onclick="eksExcel('tindakan')">📥 Daftar Tindakan</button>
+            <button class="btn sm" onclick="eksExcel('biaya')">📥 Pengeluaran</button>
+            <button class="btn sm" onclick="eksExcel('transaksi')">📥 Transaksi</button>
+          </div>
+        </div>
+
+        <!-- BLOK IMPOR (EXCEL/CSV) -->
+        <div class="sc">
+          <div class="sl">IMPOR DATA DARI EXCEL (CSV)</div>
+          <p style="font-size:11px; color:var(--t2); margin-bottom:12px">Pilih kategori data terlebih dahulu, lalu unggah file CSV yang sesuai.</p>
+          
+          <div class="fg">
+            <label style="font-size:12px; font-weight:bold">1. Pilih Kategori Impor:</label>
+            <select id="imp-tipe" class="input" style="margin-top:5px">
+              <option value="pasien">Data Pasien</option>
+              <option value="obat">Stok Obat</option>
+              <option value="tindakan">Daftar Tindakan</option>
+              <option value="biaya">Pengeluaran (Biaya)</option>
+            </select>
+          </div>
+          
+          <div class="fg" style="margin-top:15px">
+            <label style="font-size:12px; font-weight:bold">2. Unggah File:</label>
+            <input type="file" id="file-excel" onchange="prosesImporExcel(this)" style="display:block; margin-top:5px; font-size:12px">
+          </div>
+          
+          <div class="alert ai" style="margin-top:15px; padding:8px; background:#fff7ed; border:1px solid #ffedd5">
+            <small style="color:#9a3412; line-height:1.4">
+              <strong>Tips:</strong> Ekspor data terlebih dahulu untuk mendapatkan format kolom yang benar sebelum melakukan impor masal.
+            </small>
+          </div>
+        </div>
+
+        <!-- BLOK CADANGAN TOTAL (JSON) -->
+        <div class="sc" style="grid-column: span 2; background: #f8fafc; border: 1px dashed var(--bd)">
+          <div class="sl">CADANGAN TOTAL SISTEM (FORMAT .JSON)</div>
+          <p style="font-size:11px; color:var(--t2); margin-bottom:15px">
+            Gunakan ini untuk memindahkan seluruh database klinik, akun login, dan <strong>masa aktif/lisensi</strong> secara utuh.
+          </p>
+          <div class="g2">
+            <button class="btn p" style="background:#16a34a" onclick="eksporSeluruhData()">📥 Download Backup Total (.json)</button>
+            <div>
+              <input type="file" id="fullRestore" style="display:none" onchange="imporSeluruhData(this)">
+              <button class="btn d" style="width:100%" onclick="document.getElementById('fullRestore').click()">📤 Restore / Timpa Semua Data</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// --- LOGIKA EKSPOR ---
+function eksporSeluruhData() {
+  const backup = {
+    database: DB,
+    akun: USERS,
+    timestamp: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `BACKUP_KLINIK_${today()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  showNotif("✓ Data berhasil diekspor");
+}
+
+// --- LOGIKA IMPOR ---
+function imporSeluruhData(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  if (!confirm("⚠️ PERINGATAN: Mengimpor data akan menghapus data saat ini dan menggantinya dengan data dari file cadangan. Lanjutkan?")) {
+    input.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      
+      if (data.database && data.akun) {
+        // Pulihkan Data[cite: 1, 2]
+        DB = data.database;
+        USERS = data.akun;
+        
+        // Simpan Permanen[cite: 1, 2]
+        stSet(SK, DB);
+        stSet(SK_U, USERS);
+        
+        showNotif("✓ Data Berhasil Dipulihkan!");
+        setTimeout(() => location.reload(), 1500); // Refresh sistem
+      } else {
+        throw new Error("Format file cadangan tidak valid.");
+      }
+    } catch (err) {
+      alert("Gagal mengimpor data: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function eksporPasienKeExcel() {
+  const data = DB.pasien; 
+  // Header kolom sesuai kebutuhan Excel
+  const header = "ID,Nama,NIK,Tanggal Lahir,HP,Jaminan,Alamat\n";
+  
+  const rows = data.map(p => 
+    `${p.id},"${p.nama}","${p.nik || ''}",${p.tgl || ''},"${p.hp || ''}","${p.jaminan}","${p.alamat || ''}"`
+  ).join("\n");
+
+  const csvContent = "data:text/csv;charset=utf-8," + header + rows;
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `Data_Pasien_${today()}.csv`); // Nama file saat didownload
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showNotif("✓ File Excel (.csv) berhasil diunduh");
+}
+
+function imporPasienDariExcel(input) {
+  const file = input.files[0];
+  const reader = new FileReader();
+  
+  reader.onload = function(e) {
+    const text = e.target.result;
+    const lines = text.split("\n").slice(1); // Lewati baris judul/header
+    
+    lines.forEach(line => {
+      const col = line.split(",");
+      if (col.length >= 2) {
+        DB.pasien.push({
+          id: DB.ids.p++,
+          nama: col[1].replace(/"/g, ""),
+          nik: col[2].replace(/"/g, ""),
+          tgl: col[3],
+          hp: col[4].replace(/"/g, ""),
+          jaminan: col[5].replace(/"/g, ""),
+          alamat: col[6].replace(/"/g, "")
+        });
+      }
+    });
+    
+    scheduleSave(); // Simpan ke memori
+    showNotif("✓ Berhasil impor data dari Excel");
+    setTimeout(() => location.reload(), 1500);
+  };
+  reader.readAsText(file);
+}
+
+function eksExcel(tipe) {
+  let data = [];
+  let header = "";
+  let fileName = `Data_${tipe}_${today()}`;
+
+  // Tentukan sumber data dan header berdasarkan tipe
+  if (tipe === 'pasien') {
+    data = DB.pasien;
+    header = "ID,Nama,NIK,HP,Jaminan,Alamat\n";
+    var rows = data.map(p => `${p.id},"${p.nama}","${p.nik || ''}","${p.hp || ''}","${p.jaminan}","${p.alamat || ''}"`);
+  } 
+  else if (tipe === 'pegawai') {
+    data = USERS.filter(u => u.role === 'pegawai');
+    header = "Username,Nama,Role,Masa Aktif\n";
+    var rows = data.map(u => `"${u.username}","${u.nama}","${u.role}","${u.masaAktif || ''}"`);
+  }
+  else if (tipe === 'biaya') {
+    data = DB.biaya || [];
+    header = "Tanggal,Kategori,Keterangan,Jumlah\n";
+    var rows = data.map(b => `${b.tgl},"${b.kat}","${b.ket}",${b.jumlah}`);
+  }
+  else if (tipe === 'obat') {
+    data = DB.obat || [];
+    header = "Kode,Nama Obat,Satuan,Stok,Harga\n";
+    var rows = data.map(o => `"${o.kode}","${o.nama}","${o.satuan}",${o.stok},${o.harga}`);
+  }
+  else if (tipe === 'transaksi') {
+    data = DB.kunjungan || [];
+    header = "Tanggal,Pasien,Layanan,Total Bayar\n";
+    var rows = data.map(k => `${k.tgl},"${k.nama}","${k.layanan}",${k.total}`);
+  }
+
+  if (!data || data.length === 0) return showNotif("Data masih kosong!", false);
+
+  const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + header + rows.join("\n");
+  const link = document.createElement("a");
+  link.href = encodeURI(csvContent);
+  link.download = fileName + ".csv";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showNotif(`✓ ${tipe} berhasil diekspor`);
+}
+
+function prosesImporExcel(input) {
+  const file = input.files[0];
+  const tipe = document.getElementById('imp-tipe').value;
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const text = e.target.result;
+      const lines = text.split("\n").filter(l => l.trim() !== "").slice(1); // Potong header
+      
+      let count = 0;
+      lines.forEach(line => {
+        const col = line.split(",").map(c => c.replace(/"/g, "").trim());
+        
+        if (tipe === 'pasien' && col.length >= 2) {
+          DB.pasien.push({ id: DB.ids.p++, nama: col[1], nik: col[2], tgl: col[3], hp: col[4], jaminan: col[5], alamat: col[6] });
+          count++;
+        } 
+        else if (tipe === 'obat' && col.length >= 4) {
+          if (!DB.obat) DB.obat = [];
+          DB.obat.push({ kode: col[0], nama: col[1], satuan: col[2], stok: parseInt(col[3]) || 0, harga: parseInt(col[4]) || 0 });
+          count++;
+        }
+        else if (tipe === 'tindakan' && col.length >= 2) {
+          if (!DB.tindakan) DB.tindakan = [];
+          DB.tindakan.push({ id: Date.now() + count, nama: col[0], harga: parseInt(col[1]) || 0, jasa: parseInt(col[2]) || 0 });
+          count++;
+        }
+        else if (tipe === 'biaya' && col.length >= 3) {
+          if (!DB.biaya) DB.biaya = [];
+          DB.biaya.push({ id: Date.now() + count, tgl: col[0], kat: col[1], ket: col[2], jumlah: parseInt(col[3]) || 0 });
+          count++;
+        }
+      });
+
+      if (count > 0) {
+        scheduleSave(); // Simpan ke database
+        showNotif(`✓ Berhasil mengimpor ${count} data ${tipe}`);
+        setTimeout(() => location.reload(), 1500);
+      } else {
+        showNotif("Gagal: Format file tidak cocok atau data kosong", false);
+      }
+    } catch (err) {
+      console.error(err);
+      showNotif("Terjadi kesalahan saat membaca file", false);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function prosesAktivasiKode() {
+    const kode = document.getElementById('k-lisensi').value.trim();
+    const bagian = kode.split("-");
+
+    // Validasi format SMK-TANGGAL-CHECKSUM-PRM
+    if (bagian.length === 4 && bagian[0] === "SMK") {
+        const tglStr = bagian[1]; // misal 100526
+        const checksumDariKode = parseInt(bagian[2]);
+
+        // RUMUS PENGALI: (digit 1+2+3+4+5) * digit 6
+        const angka = tglStr.split('').map(Number);
+        const hitungUlang = (angka[0] + angka[1] + angka[2] + angka[3] + angka[4]) * angka[5];
+
+        if (hitungUlang === checksumDariKode) {
+            // Konversi ke format YYYY-MM-DD
+            const tglSistem = "20" + tglStr.substring(4, 6) + "-" + tglStr.substring(2, 4) + "-" + tglStr.substring(0, 2);
+            
+            // Update SEMUA user agar sinkron
+            USERS.forEach(u => {
+                u.masaAktif = tglSistem;
+            });
+            
+            // Simpan ke storage
+            stSet(SK_U, USERS);
+            if (window.storage) window.storage.set(SK_U, JSON.stringify(USERS), true);
+            
+            alert("✅ AKTIVASI BERHASIL!\nSistem diperpanjang hingga: " + tglSistem);
+            location.reload(); 
+        } else {
+            alert("❌ Kode Aktivasi Tidak Valid!");
+        }
+    } else {
+        alert("❌ Format Kode Salah!");
+    }
+}
+
+function panggilAntrian(noAntrian, namaPasien) {
+    // Mengecek apakah browser mendukung suara
+    if ('speechSynthesis' in window) {
+        const pesan = new SpeechSynthesisUtterance();
+        
+        // Setting isi suara
+        pesan.text = `Nomor antrian ${noAntrian}, atas nama ${namaPasien}, silakan menuju ruang periksa.`;
+        
+        // Ambil semua daftar suara
+        const voices = window.speechSynthesis.getVoices();
+        
+        // PERBAIKAN 1: Cari suara Google Indonesia Perempuan terlebih dahulu (Suara Premium RS)
+        let idVoice = voices.find(voice => voice.lang.includes('id-ID') && voice.name.includes('Google'));
+        
+        // PERBAIKAN 2: Jika suara Google tidak ketemu (misal offline), pakai suara ID apa saja yang ada sebagai cadangan
+        if (!idVoice) {
+            idVoice = voices.find(voice => voice.lang.includes('id-ID'));
+        }
+        
+        if (idVoice) pesan.voice = idVoice;
+        
+        pesan.rate = 0.9; // Kecepatan bicara (0.1 - 10)
+        pesan.pitch = 1;  // Nada suara (0 - 2)
+        
+        window.speechSynthesis.speak(pesan);
+    } else {
+        alert("Maaf, browser Anda tidak mendukung fitur panggilan suara.");
+    }
+}
+
+// PERBAIKAN 3: WAJIB ditambahkan di luar fungsi agar browser Chrome/Edge 
+// langsung memuat (cache) suara premium Google saat aplikasi pertama dibuka.
+if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = function() {
+        window.speechSynthesis.getVoices();
+    };
+}
+
+function saveNamaOwner() {
+  const namaBaru = document.getElementById('owner-name-input').value;
+  if (!namaBaru) return showNotif('Nama tidak boleh kosong', false);
+
+  // Update di array USERS
+  const uIdx = USERS.findIndex(x => x.username === SESSION.username);
+  if (uIdx !== -1) {
+    USERS[uIdx].nama = namaBaru;
+    SESSION.nama = namaBaru; // Update sesi aktif di memori berjalan
+    
+    // 1. KODE PERBAIKAN: Simpan menggunakan fungsi stSet bawaan sistem
+    stSet(SK_U, USERS); 
+    if (window.storage) window.storage.set(SK_U, JSON.stringify(USERS), true).catch(()=>{});
+    
+    showNotif('✓ Nama profil diperbarui menjadi ' + namaBaru);
+    
+    // 2. KODE PERBAIKAN: Paksa refresh halaman agar layar login langsung berubah
+    setTimeout(() => {
+        location.reload(); 
+    }, 1000);
+  }
+}
+
+
+function initKeuanganCharts() {
+  // 1. Ambil Data Perhitungan dari Elemen atau Hitung Cepat dari DB
+  const kunjunganFilter = DB.kunjungan.filter(k => k.tgl >= _fMulai && k.tgl <= _fSelesai);
+  const biayaFilter = (DB.biaya || []).filter(b => b.tgl >= _fMulai && b.tgl <= _fSelesai);
+
+  // Komponen Beban
+  const hppObat = kunjunganFilter.reduce((s, k) => s + (k.resep || []).reduce((rs, r) => {
+    const o = DB.obat.find(x => x.id === r.obatId);
+    return rs + (o ? o.hb * r.jml : 0);
+  }, 0), 0);
+  const totalJasaPegawai = kunjunganFilter.reduce((s, k) => {
+    const h = DB.hargaTindakan.find(x => x.nama === k.layanan);
+    return s + (h ? (h.jasa || 0) : 0);
+  }, 0);
+  const totalBiayaUmum = biayaFilter.reduce((s, b) => s + b.jumlah, 0);
+
+  // Cari Tren Harian (Labels Tanggal)
+  const mapHari = {};
+  kunjunganFilter.forEach(k => {
+    if (!mapHari[k.tgl]) mapHari[k.tgl] = { omzet: 0, laba: 0 };
+    const h = DB.hargaTindakan.find(x => x.nama === k.layanan);
+    const harga = h ? h.harga : 0;
+    const diskon = k.diskonACC ? (k.diskon || 0) : 0;
+    const hpp = (k.resep || []).reduce((rs, r) => {
+      const o = DB.obat.find(x => x.id === r.obatId);
+      return rs + (o ? o.hb * r.jml : 0);
+    }, 0);
+    const jPeg = h ? (h.jasa || 0) : 0;
+
+    mapHari[k.tgl].omzet += harga - diskon;
+    mapHari[k.tgl].laba += (harga - diskon) - (hpp + jPeg);
+  });
+
+  const urutTanggal = Object.keys(mapHari).sort();
+  const dataOmzet = urutTanggal.map(t => mapHari[t].omzet);
+  const dataLaba = urutTanggal.map(t => mapHari[t].laba);
+
+  // === GRAFIK TREN (LINE CHART) ===
+  const ctxLine = document.getElementById('chartTrenKeuangan').getContext('2d');
+  new Chart(ctxLine, {
+    type: 'line',
+    data: {
+      labels: urutTanggal.length > 0 ? urutTanggal : [today()],
+      datasets: [
+        { label: 'Omzet Net', data: dataOmzet.length > 0 ? dataOmzet : [0], borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.05)', tension: 0.2, fill: true },
+        { label: 'Laba Kotor Kamar', data: dataLaba.length > 0 ? dataLaba : [0], borderColor: '#7c3aed', backgroundColor: 'rgba(124,58,237,0.05)', tension: 0.2, fill: true }
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { font: { family: 'Plus Jakarta Sans', size: 11 } } } } }
+  });
+
+  // === GRAFIK ALOKASI BEBAN (PIE CHART) ===
+  const ctxPie = document.getElementById('chartAlokasiBeban').getContext('2d');
+  new Chart(ctxPie, {
+    type: 'pie',
+    data: {
+      labels: ['HPP Obat', 'Jasa Pegawai', 'Operasional'],
+      datasets: [{
+        data: [hppObat, totalJasaPegawai, totalBiayaUmum],
+        backgroundColor: ['#ef4444', '#a78bfa', '#f59e0b']
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { family: 'Plus Jakarta Sans', size: 10 } } } } }
+  });
+}
+
+function cetakRekapHarian() {
+  const tgl = today(); // Hanya ambil data hari ini
+  const kToday = DB.kunjungan.filter(k => k.tgl === tgl);
+  const bToday = (DB.biaya || []).filter(b => b.tgl === tgl);
+  const info = DB.info || {};
+
+  // 1. Hitung Kas Masuk
+  let penerimaan = 0;
+  let rincianMasuk = '';
+  kToday.forEach(k => {
+    const h = DB.hargaTindakan.find(x => x.nama === k.layanan);
+    const harga = h ? h.harga : 0;
+    const diskon = k.diskonACC ? (k.diskon || 0) : 0;
+    
+    let omzetObat = 0;
+    (k.resep || []).forEach(r => {
+      const o = DB.obat.find(x => x.id === r.obatId);
+      omzetObat += (o ? o.hj * r.jml : 0);
+    });
+
+    const sub = (harga - diskon) + omzetObat;
+    penerimaan += sub;
+    const p = DB.pasien.find(x => x.id === k.pasienId);
+    rincianMasuk += `<tr><td style="padding:4px 0">${p ? p.nama : '-'}</td><td style="text-align:right">Rp${fmt(sub)}</td></tr>`;
+  });
+
+  // 2. Hitung Kas Keluar
+  let totalKeluar = 0;
+  let rincianKeluar = '';
+  
+  // Kas keluar untuk Jasa Bidan langsung
+  kToday.forEach(k => {
+    const h = DB.hargaTindakan.find(x => x.nama === k.layanan);
+    const jasa = h ? (h.jasa || 0) : 0;
+    if(jasa > 0) {
+        totalKeluar += jasa;
+        const bd = DB.bidan.find(x => x.id === k.bidanId);
+        rincianKeluar += `<tr><td style="padding:4px 0; color:#555">Jasa: ${bd ? bd.nama.split(',')[0] : '-'}</td><td style="text-align:right">Rp${fmt(jasa)}</td></tr>`;
+    }
+  });
+
+  // Kas keluar untuk Operasional Hari Ini
+  bToday.forEach(b => {
+     totalKeluar += b.jumlah;
+     rincianKeluar += `<tr><td style="padding:4px 0; color:#555">Ops: ${b.ket}</td><td style="text-align:right">Rp${fmt(b.jumlah)}</td></tr>`;
+  });
+
+  // 3. Saldo Fisik yang harus ada di laci
+  const saldoKas = penerimaan - totalKeluar;
+
+  // 4. Bangun Tampilan HTML untuk di-print
+  const html = `
+    <div style="text-align:center; margin-bottom:15px; border-bottom:2px solid #000; padding-bottom:10px">
+      <strong style="font-size:16px">${info.nama || 'KLINIK BIDAN SEHAT'}</strong>
+      <div style="font-size:12px">SLIP TUTUP KASIR HARIAN</div>
+    </div>
+    
+    <table style="width:100%; font-size:12px; margin-bottom:15px">
+      <tr>
+        <td><strong>Tanggal:</strong> ${tgl}</td>
+        <td style="text-align:right"><strong>Kasir:</strong> ${SESSION.nama.split(',')[0]}</td>
+      </tr>
+    </table>
+    
+    <div style="font-weight:bold; font-size:13px; margin-bottom:5px; border-bottom:1px dashed #000; padding-bottom:5px">KAS MASUK</div>
+    <table style="width:100%; font-size:12px; margin-bottom:15px">
+      ${rincianMasuk || '<tr><td>Tidak ada pemasukan</td><td style="text-align:right">Rp0</td></tr>'}
+      <tr style="font-weight:bold"><td style="padding-top:8px">TOTAL MASUK</td><td style="text-align:right; padding-top:8px">Rp${fmt(penerimaan)}</td></tr>
+    </table>
+
+    <div style="font-weight:bold; font-size:13px; margin-bottom:5px; border-bottom:1px dashed #000; padding-bottom:5px">KAS KELUAR</div>
+    <table style="width:100%; font-size:12px; margin-bottom:15px">
+      ${rincianKeluar || '<tr><td>Tidak ada pengeluaran</td><td style="text-align:right">Rp0</td></tr>'}
+      <tr style="font-weight:bold"><td style="padding-top:8px">TOTAL KELUAR</td><td style="text-align:right; padding-top:8px">Rp${fmt(totalKeluar)}</td></tr>
+    </table>
+
+    <table style="width:100%; font-size:15px; margin-top:20px; border-top:2px solid #000; border-bottom:2px solid #000; padding:12px 0">
+      <tr style="font-weight:bold">
+        <td>SALDO DI LACI</td>
+        <td style="text-align:right">Rp${fmt(saldoKas)}</td>
+      </tr>
+    </table>
+
+    <div style="margin-top:40px; text-align:center; font-size:12px">
+      Pemeriksa / Shift Selanjutnya<br><br><br><br><br>
+      ( ..................................... )
+    </div>
+  `;
+
+  // Buka jendela baru dan print
+  const win = window.open('', '_blank', 'width=380,height=600');
+  win.document.write("<html><head><title>Rekap Kasir</title><style>@import url('https://fonts.googleapis.com/css2?family=DM+Mono&display=swap');body { font-family:'DM Mono', monospace; padding:15px; color:#111; }</style></head><body onload='window.print();window.close()'>" + html + "</body></html>");
+  win.document.close();
+}
+
+function filterObat(inputEl, containerId) {
+  const container = document.getElementById(containerId);
+  const listEl = container.querySelector('.obat-list-drop');
+  const q = inputEl.value.toLowerCase();
+  
+  listEl.innerHTML = '';
+  
+  // Filter berdasarkan nama atau kategori obat
+  const filtered = DB.obat.filter(o => 
+    o.nama.toLowerCase().includes(q) || 
+    (o.kat && o.kat.toLowerCase().includes(q))
+  );
+
+  if (filtered.length === 0) {
+    listEl.innerHTML = '<div style="padding:8px;font-size:11px;color:#999;text-align:center">Obat tidak ditemukan</div>';
+  } else {
+    filtered.forEach(o => {
+      const div = document.createElement('div');
+      div.style.cssText = 'padding:8px 10px; cursor:pointer; font-size:12px; border-bottom:1px solid #f3f4f6; transition:0.1s';
+      div.onmouseover = () => div.style.background = '#f3f4f6';
+      div.onmouseout = () => div.style.background = '#fff';
+      
+      // Beri peringatan merah jika stok habis
+      const stokColor = o.stok <= 0 ? 'color:var(--re);font-weight:bold' : 'color:#666';
+      div.innerHTML = `
+        <strong style="color:var(--tx)">${o.nama}</strong> 
+        <div style="font-size:10px; ${stokColor}; margin-top:2px">Stok: ${o.stok} ${o.sat}</div>
+      `;
+      
+      // Eksekusi saat obat diklik
+      div.onclick = function() {
+		if (o.stok <= 0) {
+		  showNotif('Stok obat ini sudah habis!', false);
+		  return;
+		}
+		inputEl.value = o.nama;
+		container.querySelector('.obat-id-val').value = o.id;
+		listEl.style.display = 'none';
+
+		// TAMBAHKAN BARIS INI:
+		hitungEstimasiBiaya();
+	  };
+      listEl.appendChild(div);
+    });
+  }
+  listEl.style.display = 'block';
+}
+
+// Menutup dropdown otomatis jika bidan mengklik area lain di luar kotak pencarian
+document.addEventListener('click', function(e) {
+  if (!e.target.classList.contains('obat-search-input')) {
+    document.querySelectorAll('.obat-list-drop').forEach(l => l.style.display = 'none');
+  }
+});
+
+
+function hitungEstimasiBiaya() {
+  try {
+    const aid = parseInt(document.getElementById('pr-aid').value);
+    const a = DB.antrian.find(x => x.id === aid);
+    if (!a) return;
+
+    // 1. Ambil harga layanan
+    const h = DB.hargaTindakan.find(x => x.nama === a.layanan);
+    let total = h ? h.harga : 0;
+
+    // 2. Tambahkan harga semua obat
+    const resep = getResepRows();
+    resep.forEach(r => {
+      const o = DB.obat.find(x => x.id === r.obatId);
+      if (o) {
+        total += (o.hj * r.jml);
+      }
+    });
+
+    // 3. AMBIL NILAI DISKON & KURANGI TOTALNYA
+    const diskon = parseInt(document.getElementById('pr-diskon').value) || 0;
+    total = total - diskon;
+
+    // 4. Pastikan total tidak minus (jika bidan salah ketik diskon terlalu besar)
+    if (total < 0) total = 0;
+
+    // 5. Tampilkan ke layar
+    const elTotal = document.getElementById('pr-total-estimasi');
+    if (elTotal) elTotal.textContent = 'Rp' + fmt(total);
+  } catch (e) {
+    console.error("Gagal menghitung estimasi", e);
+  }
+}
+
+</script> <!-- Tag penutup script asli -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+</body>
+</html>
