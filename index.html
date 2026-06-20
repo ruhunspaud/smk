@@ -1909,10 +1909,14 @@ function cetakStrukBiaya(kId) {
       const o = DB.obat.find(x => x.id === r.obatId);
       const sub = o ? o.hj * r.jml : 0;
       totalObat += sub;
+      // Format 2 baris khas kasir: Nama barang di atas, qty x harga di bawah
       rincianObatHtml += `
         <tr>
-          <td style="padding:4px 0">${o ? o.nama : 'Obat'} (x${r.jml})</td>
-          <td style="text-align:right">Rp${fmt(sub)}</td>
+          <td colspan="2" style="padding-top:4px">${o ? o.nama : 'Obat'}</td>
+        </tr>
+        <tr>
+          <td>${r.jml} x ${fmt(o ? o.hj : 0)}</td>
+          <td style="text-align:right">${fmt(sub)}</td>
         </tr>`;
     });
   }
@@ -1920,63 +1924,90 @@ function cetakStrukBiaya(kId) {
   const diskonFinal = k.diskonACC ? (k.diskon || 0) : 0;
   const totalTagihan = biayaLayanan + totalObat - diskonFinal;
 
+  // Struktur HTML khusus Thermal
   const isiStruk = `
-    <div style="text-align:center; margin-bottom:14px; padding-bottom:12px; border-bottom:2px solid #000">
-      <strong style="font-size:16px; font-family:'Plus Jakarta Sans',sans-serif;">${info.nama || 'KLINIK BIDAN SEHAT'}</strong>
-      <div style="font-size:11px; margin-top:4px">${info.alamat || '-'}</div>
-      <div style="font-size:11px">Telp: ${info.telp || '-'} &nbsp;·&nbsp; ${info.tagline || '-'}</div>
+    <div class="header">
+      <strong>${info.nama || 'KLINIK BIDAN SEHAT'}</strong><br>
+      ${info.alamat || '-'}<br>
+      Telp: ${info.telp || '-'}<br>
+      ${info.tagline || '-'}
     </div>
     
-    <div style="text-align:center; text-transform:uppercase; font-weight:bold; letter-spacing:2px; margin-bottom:15px; font-size:13px">Kuitansi Pembayaran</div>
-
-    <table style="width:100%; font-size:11.5px; margin-bottom:15px">
-      <tr><td style="width:50%"><strong>Nama Pasien:</strong> ${p ? p.nama : '–'}</td><td style="text-align:right"><strong>Tanggal:</strong> ${k.tgl}</td></tr>
-      <tr><td><strong>No. Registrasi:</strong> #K${k.id}</td><td style="text-align:right"><strong>Jaminan:</strong> ${p ? p.jaminan : '–'}</td></tr>
+    <div class="divider"></div>
+    
+    <table class="info-table">
+      <tr><td>Tgl</td><td>: ${k.tgl}</td></tr>
+      <tr><td>Pasien</td><td>: ${p ? p.nama.split(' ')[0] : '–'}</td></tr>
+      <tr><td>No.Reg</td><td>: #K${k.id}</td></tr>
     </table>
 
-    <table style="width:100%; font-size:12px; border-collapse:collapse">
-      <tr style="border-bottom:1px solid #000; border-top:1px solid #000">
-        <th style="text-align:left; padding:8px 0">Deskripsi Layanan/Item</th>
-        <th style="text-align:right; padding:8px 0">Subtotal</th>
+    <div class="divider"></div>
+
+    <table class="item-table">
+      <tr>
+        <td colspan="2" style="padding-top:4px"><strong>${k.layanan}</strong></td>
       </tr>
       <tr>
-        <td style="padding:8px 0">${k.layanan}</td>
-        <td style="text-align:right">Rp${fmt(biayaLayanan)}</td>
+        <td>1 x ${fmt(biayaLayanan)}</td>
+        <td style="text-align:right">${fmt(biayaLayanan)}</td>
       </tr>
       ${rincianObatHtml}
-      ${diskonFinal > 0 ? `
-      <tr style="color:#dc2626">
-        <td style="padding:4px 0">Diskon Khusus (Owner ACC)</td>
-        <td style="text-align:right">-Rp${fmt(diskonFinal)}</td>
-      </tr>` : ''}
-      <tr style="border-top:2px solid #000">
-        <td style="padding:10px 0; font-weight:bold; font-size:14px">TOTAL BAYAR</td>
-        <td style="padding:10px 0; text-align:right; font-weight:bold; font-size:14px">Rp${fmt(totalTagihan)}</td>
+    </table>
+
+    ${diskonFinal > 0 ? `
+    <table class="item-table" style="margin-top:4px">
+      <tr>
+        <td>Diskon Khusus</td>
+        <td style="text-align:right">- ${fmt(diskonFinal)}</td>
+      </tr>
+    </table>` : ''}
+
+    <div class="divider"></div>
+
+    <table class="total-table">
+      <tr>
+        <td>TOTAL</td>
+        <td>Rp${fmt(totalTagihan)}</td>
       </tr>
     </table>
 
-    <div style="margin-top:30px; display:flex; justify-content:space-between; align-items:flex-end">
-      <div style="font-size:10px; font-style:italic; color:#666">
-        * Dicetak otomatis oleh Sistem Online Klinik<br>
-        * Harap simpan sebagai bukti pembayaran sah
-      </div>
-      <div style="text-align:center; font-size:11.5px">
-        Kasir/Bidan,<br><br><br><br>
-        <strong>${bd ? bd.nama.split(',')[0] : '-'}</strong>
-      </div>
+    <div class="divider"></div>
+
+    <div class="footer">
+      Kasir: ${bd ? bd.nama.replace('Bdn. ', '').split(',')[0] : '-'}<br><br>
+      Terima kasih atas kunjungan Anda<br>
+      Semoga lekas sembuh
     </div>
   `;
 
-  const win = window.open('', '_blank', 'width=650,height=850');
+  // Lebar window pop-up dibuat kecil
+  const win = window.open('', '_blank', 'width=300,height=600');
   win.document.write(`
     <html>
       <head>
-        <title>Struk Pembayaran - ${p ? p.nama : ''}</title>
+        <title>Struk - ${p ? p.nama : ''}</title>
         <style>
-          @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=DM+Mono&display=swap');
-          body { font-family:'Plus Jakarta Sans', sans-serif; padding:40px; color:#111; line-height:1.4; }
-          table { font-family:'DM Mono', monospace; }
-          @media print { body { padding:10px; } }
+          /* Menggunakan font monospace agar rapi seperti mesin kasir */
+          @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;700&display=swap');
+          
+          @page { margin: 0; }
+          body {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            color: #000;
+            margin: 0;
+            padding: 8px; /* Padding kecil agar tidak mepet tepi kertas */
+            width: 48mm;  /* Ukuran standar area cetak kertas 58mm */
+          }
+          .header { text-align: center; margin-bottom: 6px; line-height: 1.2; }
+          .header strong { font-size: 13px; }
+          .divider { border-top: 1px dashed #000; margin: 6px 0; }
+          table { width: 100%; border-collapse: collapse; font-size: 11px; }
+          .info-table td { padding: 1px 0; vertical-align: top; }
+          .item-table td { padding: 1px 0; }
+          .total-table { font-weight: bold; font-size: 13px; }
+          .total-table td:last-child { text-align: right; }
+          .footer { text-align: center; margin-top: 10px; line-height: 1.2; }
         </style>
       </head>
       <body onload="window.print();window.close()">${isiStruk}</body>
