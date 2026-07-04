@@ -1362,15 +1362,68 @@ function pgKeuangan() {
 // --- LAPORAN ---
 function pgLaporan() {
   if(!isOwner())return lockedPage();
-  const lCnt={};DB.kunjungan.forEach(k=>{lCnt[k.layanan]=(lCnt[k.layanan]||0)+1;});
+
+  // 1. KLASIFIKASI TINDAKAN / LAYANAN
+  const lCnt={}; DB.kunjungan.forEach(k=>{ lCnt[k.layanan]=(lCnt[k.layanan]||0)+1; });
   const maxL=Math.max(...Object.values(lCnt),1);
   const bars=Object.entries(lCnt).sort((a,b)=>b[1]-a[1]).map(([l,c])=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><div style="width:130px;font-size:11px;color:var(--t3);text-align:right;flex-shrink:0">${l}</div><div style="flex:1;background:#e5e7eb;border-radius:4px;height:20px;overflow:hidden"><div style="width:${Math.round(c/maxL*100)}%;background:var(--g);height:100%;display:flex;align-items:center;padding-left:8px"><span style="font-size:11px;font-weight:700;color:#fff">${c}</span></div></div></div>`).join('');
-  const jCnt={};DB.pasien.forEach(p=>{jCnt[p.jaminan]=(jCnt[p.jaminan]||0)+1;});
+  
+  // 2. JAMINAN
+  const jCnt={}; DB.pasien.forEach(p=>{ jCnt[p.jaminan]=(jCnt[p.jaminan]||0)+1; });
   const jRows=Object.entries(jCnt).map(([j,c])=>`<tr><td>${j}</td><td>${c}</td><td>${Math.round(c/DB.pasien.length*100)}%</td></tr>`).join('');
+  
+  // 3. BIDAN
   const bRows=DB.bidan.map(b=>{const c=DB.kunjungan.filter(k=>k.bidanId===b.id).length;return `<tr><td>${b.nama.replace('Bdn. ','').split(',')[0]}</td><td>${b.jab}</td><td>${c}</td><td><span class="badge ${b.status==='Aktif'?'bg2':b.status==='Cuti'?'ba2':'br2'}">${b.status}</span></td></tr>`;}).join('');
-  return `<div class="g2"><div class="sec"><div class="sh"><h3>Kunjungan per Layanan</h3></div>${bars||'<p style="color:var(--t3);text-align:center;padding:20px">Belum ada data</p>'}</div><div class="sec"><div class="sh"><h3>Pasien per Jaminan</h3></div><table><tr><th>Jaminan</th><th>Jumlah</th><th>%</th></tr>${jRows}</table></div></div>
-  <div class="g2"><div class="sec"><div class="sh"><h3>Statistik Bidan</h3></div><table><tr><th>Nama</th><th>Jabatan</th><th>Kunjungan</th><th>Status</th></tr>${bRows}</table></div>
-  <div class="sec"><div class="sh"><h3>Stok Obat Lengkap</h3></div><table><tr><th>Obat</th><th>Stok</th><th>Min</th><th>Status</th></tr>${DB.obat.map(o=>`<tr><td>${o.nama}</td><td>${o.stok} ${o.sat}</td><td>${o.stokMin}</td><td><span class="badge ${o.stok===0?'br2':o.stok<=o.stokMin?'ba2':'bg2'}">${o.stok===0?'Habis':o.stok<=o.stokMin?'Rendah':'Aman'}</span></td></tr>`).join('')}</table></div></div>`;
+
+  // 4. KLASIFIKASI OBAT KELUAR TERBANYAK
+  const oCnt={};
+  DB.kunjungan.forEach(k => {
+     (k.resep||[]).forEach(r => {
+         oCnt[r.obatId] = (oCnt[r.obatId]||0) + r.jml;
+     });
+  });
+  const oRows = Object.entries(oCnt).sort((a,b)=>b[1]-a[1]).slice(0, 10).map(([oid, jml]) => {
+      const ob = DB.obat.find(x => x.id == oid);
+      return `<tr><td><strong style="font-weight:600">${ob?ob.nama:'-'}</strong></td><td style="text-align:right"><span class="badge bp2">${jml} Keluar</span></td></tr>`;
+  }).join('');
+
+  // 5. KLASIFIKASI PENYAKIT (DIAGNOSA)
+  // Sistem akan membaca kata pertama sebelum tanda koma (,) atau titik (.) pada kolom Diagnosa/Catatan
+  const dCnt={};
+  DB.kunjungan.forEach(k => {
+     let diag = k.cat ? k.cat.split(',')[0].split('.')[0].trim().toLowerCase() : 'tanpa diagnosa';
+     if(diag.length > 30) diag = diag.substring(0,30) + '...';
+     dCnt[diag] = (dCnt[diag]||0) + 1;
+  });
+  const dRows = Object.entries(dCnt).sort((a,b)=>b[1]-a[1]).slice(0, 10).map(([diag, c]) => {
+      return `<tr><td style="text-transform:capitalize; font-weight:600">${diag}</td><td style="text-align:right"><span class="badge ba2">${c} Pasien</span></td></tr>`;
+  }).join('');
+
+  return `
+  <div class="g2">
+    <div class="sec">
+        <div class="sh"><h3>10 Klasifikasi Penyakit/Diagnosa Terbanyak</h3></div>
+        <table><tr><th>Nama Diagnosa (Berdasar Catatan)</th><th style="text-align:right">Jumlah</th></tr>${dRows||'<tr><td colspan="2" style="text-align:center;color:var(--t3)">Belum ada data</td></tr>'}</table>
+    </div>
+    <div class="sec">
+        <div class="sh"><h3>Klasifikasi Tindakan / Layanan</h3></div>
+        ${bars||'<p style="color:var(--t3);text-align:center;padding:20px">Belum ada data</p>'}
+    </div>
+  </div>
+  <div class="g2">
+    <div class="sec">
+        <div class="sh"><h3>10 Obat Paling Sering Keluar</h3></div>
+        <table><tr><th>Nama Obat</th><th style="text-align:right">Total Pemakaian</th></tr>${oRows||'<tr><td colspan="2" style="text-align:center;color:var(--t3)">Belum ada data</td></tr>'}</table>
+    </div>
+    <div class="sec">
+        <div class="sh"><h3>Pasien per Jaminan Asuransi</h3></div>
+        <table><tr><th>Jaminan</th><th>Jumlah</th><th>Persentase</th></tr>${jRows}</table>
+    </div>
+  </div>
+  <div class="g2">
+      <div class="sec"><div class="sh"><h3>Statistik Bidan</h3></div><table><tr><th>Nama</th><th>Jabatan</th><th>Kunjungan</th><th>Status</th></tr>${bRows}</table></div>
+      <div class="sec"><div class="sh"><h3>Stok Obat Kritis/Habis</h3></div><table><tr><th>Obat</th><th>Stok</th><th>Min</th><th>Status</th></tr>${DB.obat.filter(o=>o.stok<=o.stokMin).map(o=>`<tr><td>${o.nama}</td><td>${o.stok} ${o.sat}</td><td>${o.stokMin}</td><td><span class="badge ${o.stok===0?'br2':o.stok<=o.stokMin?'ba2':'bg2'}">${o.stok===0?'Habis':o.stok<=o.stokMin?'Rendah':'Aman'}</span></td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--g);padding:10px">Semua stok obat dalam kondisi aman</td></tr>'}</table></div>
+  </div>`;
 }
 
 // --- PROFIL ---
@@ -1607,13 +1660,33 @@ function savePeriksa() {
     tind: document.getElementById('pr-tind').value,
     resep: resep,
     diskon: discVal,
-    diskonACC: discVal > 0 ? false : true // Jika ada diskon, status false (menunggu Owner)
+    diskonACC: discVal > 0 ? false : true 
   };
 
   DB.kunjungan.push(k);
   const ai = DB.antrian.findIndex(x => x.id === aid);
   DB.antrian[ai].status = 'Selesai';
   DB.antrian[ai].kunjunganId = k.id;
+
+  // --- KODE BARU: KURANGI STOK OBAT & CATAT HISTORI TRANSAKSI ---
+  resep.forEach(r => {
+    const ob = DB.obat.find(x => x.id === r.obatId);
+    if (ob) {
+      ob.stok -= r.jml; // Mengurangi stok
+      if (ob.stok < 0) ob.stok = 0; // Mencegah stok minus
+      
+      // Catat bahwa obat ini keluar di histori transaksi (agar tampil di menu Transaksi)
+      DB.txObat.push({
+        id: DB.ids.tx++,
+        obatId: ob.id,
+        jenis: 'Keluar',
+        jml: r.jml,
+        tgl: today(),
+        ket: `Resep untuk Pasien #${a.pasienId}`
+      });
+    }
+  });
+  // ---------------------------------------------------------------
 
   scheduleSave();
   closeM('m-periksa');
