@@ -3,11 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Klinik Bidan Sehat — Sistem Online</title>
+<title>Praktik Mandiri Bidan Rini — Layanan Kesehatan Ibu & Anak</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
+  --ri-ink:#2B2320;--ri-cream:#FBF4EC;--ri-pine:#1F5A4A;--ri-pineD:#164B3D;
+  --ri-clay:#C76B5D;--ri-clayD:#B15848;--ri-blush:#F3D9CE;--ri-gold:#C9A227;
   --g:#16a34a;--gd:#15803d;--gl:#dcfce7;--gm:#86efac;
   --p:#7c3aed;--pl:#ede9fe;--pm:#a78bfa;
   --am:#d97706;--al:#fef3c7;
@@ -210,12 +212,324 @@ tr:hover td{background:#fafafa}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 
+/* ==================================================================
+   PRAKTIK MANDIRI BIDAN RINI — LANDING PAGE
+   ================================================================== */
+#site{background:var(--ri-cream);color:var(--ri-ink);font-family:'Plus Jakarta Sans',sans-serif;overflow-x:hidden}
+#site h1,#site h2,#site h3{font-family:'Fraunces',serif;font-weight:600;letter-spacing:-.01em}
+#site .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+#site a{color:inherit;text-decoration:none}
+
+/* --- Nav --- */
+.ri-nav{position:sticky;top:0;z-index:40;background:rgba(251,244,236,.88);backdrop-filter:blur(10px);border-bottom:1px solid rgba(43,35,32,.08)}
+.ri-nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px}
+.ri-brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--ri-pineD)}
+.ri-brand .dot{width:9px;height:9px;border-radius:50%;background:var(--ri-clay);flex-shrink:0}
+.ri-links{display:flex;align-items:center;gap:32px}
+.ri-links a{font-size:14px;font-weight:500;color:var(--ri-ink);opacity:.75;transition:.15s}
+.ri-links a:hover{opacity:1;color:var(--ri-pineD)}
+.ri-cta{display:flex;align-items:center;gap:8px}
+.ri-wa-btn{display:inline-flex;align-items:center;gap:6px;background:var(--ri-pine);color:#fff!important;padding:10px 18px;border-radius:100px;font-size:13.5px;font-weight:600;transition:.15s;border:none;cursor:pointer}
+.ri-wa-btn:hover{background:var(--ri-pineD)}
+.ri-login-btn{display:inline-flex;align-items:center;gap:7px;background:transparent;color:var(--ri-ink)!important;padding:10px 16px;border-radius:100px;font-size:13.5px;font-weight:600;border:1.5px solid rgba(43,35,32,.18);cursor:pointer;transition:.15s}
+.ri-login-btn:hover{border-color:var(--ri-pine);color:var(--ri-pineD)!important}
+.ri-login-btn svg{width:15px;height:15px}
+.ri-burger{display:none;background:none;border:none;cursor:pointer;padding:6px}
+.ri-burger svg{width:24px;height:24px;color:var(--ri-ink)}
+.ri-mobile-panel{display:none;flex-direction:column;gap:2px;background:var(--ri-cream);border-bottom:1px solid rgba(43,35,32,.08);padding:8px 24px 18px}
+.ri-mobile-panel.open{display:flex}
+.ri-mobile-panel a,.ri-mobile-panel button{padding:12px 4px;font-size:15px;font-weight:500;text-align:left;background:none;border:none;border-bottom:1px solid rgba(43,35,32,.06);color:var(--ri-ink);cursor:pointer}
+
+/* --- Hero --- */
+.ri-hero{position:relative;padding:64px 0 40px}
+.ri-hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.ri-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--ri-blush);color:var(--ri-clayD);font-size:12.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:7px 14px;border-radius:100px;margin-bottom:22px}
+.ri-hero h1{font-size:44px;line-height:1.12;color:var(--ri-pineD);margin-bottom:18px}
+.ri-hero h1 em{font-style:normal;color:var(--ri-clay)}
+.ri-hero p.lead{font-size:16.5px;line-height:1.65;color:var(--ri-ink);opacity:.8;max-width:460px;margin-bottom:30px}
+.ri-hero-ctas{display:flex;gap:14px;margin-bottom:38px;flex-wrap:wrap}
+.ri-btn-lg{padding:14px 26px;font-size:14.5px;border-radius:100px}
+.ri-hero-badges{display:flex;gap:28px;flex-wrap:wrap}
+.ri-badge{font-family:'DM Mono',monospace}
+.ri-badge b{display:block;font-size:22px;color:var(--ri-pineD);font-weight:500}
+.ri-badge span{font-size:11.5px;color:var(--ri-ink);opacity:.6;text-transform:uppercase;letter-spacing:.03em}
+
+/* --- Signature curve graphic (kartu tumbuh kembang) --- */
+.ri-curve-wrap{position:relative}
+.ri-curve-svg{width:100%;height:auto;display:block}
+.ri-curve-path{fill:none;stroke:var(--ri-pine);stroke-width:3;stroke-linecap:round;stroke-dasharray:640;stroke-dashoffset:640;animation:ri-draw 1.8s ease forwards .3s}
+@keyframes ri-draw{to{stroke-dashoffset:0}}
+.ri-curve-dot{opacity:0;animation:ri-pop .4s ease forwards}
+@keyframes ri-pop{to{opacity:1;transform:scale(1)}}
+.ri-curve-label{font-family:'DM Mono',monospace;font-size:10.5px;fill:var(--ri-ink);opacity:.65}
+.ri-curve-label-b{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:11.5px;fill:var(--ri-pineD)}
+
+/* --- Section shell --- */
+.ri-section{padding:84px 0}
+.ri-section-head{max-width:560px;margin-bottom:52px}
+.ri-kicker{font-family:'DM Mono',monospace;font-size:12px;color:var(--ri-clay);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;display:block}
+.ri-section-head h2{font-size:32px;color:var(--ri-pineD);line-height:1.2}
+
+/* --- Services (perjalanan tumbuh kembang) --- */
+.ri-services{position:relative}
+.ri-service-row{display:grid;grid-template-columns:56px 1fr;gap:24px;padding:26px 0;border-top:1px solid rgba(43,35,32,.1)}
+.ri-service-row:last-child{border-bottom:1px solid rgba(43,35,32,.1)}
+.ri-service-stage{font-family:'DM Mono',monospace;font-size:12px;color:var(--ri-clay);padding-top:3px}
+.ri-service-body h3{font-size:19px;color:var(--ri-pineD);margin-bottom:6px;font-weight:600}
+.ri-service-body p{font-size:14px;opacity:.75;line-height:1.6;max-width:560px}
+.ri-service-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.ri-tag{font-size:11.5px;background:var(--ri-blush);color:var(--ri-clayD);padding:4px 10px;border-radius:100px;font-weight:600}
+
+/* --- About --- */
+.ri-about{background:var(--ri-pineD);color:#fff;border-radius:28px;margin:0 24px;padding:0}
+.ri-about .wrap{max-width:1120px;padding:64px 40px;display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:center}
+.ri-avatar{width:100%;aspect-ratio:1;border-radius:20px;background:linear-gradient(150deg,var(--ri-clay),var(--ri-pine));display:flex;align-items:center;justify-content:center}
+.ri-avatar svg{width:46%;height:46%;opacity:.9}
+.ri-about h2{color:#fff;font-size:28px;margin-bottom:14px}
+.ri-about p{font-size:15px;line-height:1.7;opacity:.88;margin-bottom:22px}
+.ri-cred-list{display:flex;flex-direction:column;gap:10px}
+.ri-cred-list div{display:flex;align-items:center;gap:10px;font-size:13.5px;opacity:.92}
+.ri-cred-list svg{width:16px;height:16px;flex-shrink:0;color:var(--ri-blush)}
+
+/* --- Contact --- */
+.ri-contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.ri-info-card{background:#fff;border:1px solid rgba(43,35,32,.1);border-radius:18px;padding:26px}
+.ri-info-card svg{width:20px;height:20px;color:var(--ri-clay);margin-bottom:12px}
+.ri-info-card h4{font-size:13px;text-transform:uppercase;letter-spacing:.03em;color:var(--ri-ink);opacity:.55;margin-bottom:6px;font-weight:600}
+.ri-info-card p{font-size:15px;font-weight:500;line-height:1.5}
+.ri-contact-cta{background:var(--ri-clay);border-radius:18px;padding:32px;color:#fff;grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px}
+.ri-contact-cta h3{color:#fff;font-size:22px}
+.ri-contact-cta p{opacity:.92;font-size:14px;margin-top:4px}
+
+/* --- Footer --- */
+.ri-footer{border-top:1px solid rgba(43,35,32,.1);padding:36px 0}
+.ri-footer .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ri-footer p{font-size:12.5px;opacity:.55}
+
+/* --- Back to site button (shown while app is open) --- */
+#back-to-site{position:fixed;top:14px;left:14px;z-index:9999;display:flex;align-items:center;gap:6px;background:var(--ri-pineD,#164B3D);color:#fff;border:none;padding:9px 14px 9px 10px;border-radius:100px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+#back-to-site svg{width:15px;height:15px}
+#back-to-site:hover{background:#0f3a2e}
+
+@media(max-width:860px){
+  .ri-links{display:none}
+  .ri-burger{display:inline-flex}
+  .ri-nav .ri-wa-btn.desktop-only{display:none}
+  .ri-hero .wrap{grid-template-columns:1fr;gap:36px}
+  .ri-hero h1{font-size:32px}
+  .ri-about .wrap{grid-template-columns:1fr;padding:44px 24px}
+  .ri-avatar{max-width:180px;margin:0 auto}
+  .ri-contact-grid{grid-template-columns:1fr}
+  .ri-section{padding:56px 0}
+  .ri-about{margin:0 12px}
+}
+@media(max-width:480px){
+  #site .wrap{padding:0 18px}
+  .ri-hero{padding:40px 0 24px}
+  .ri-hero h1{font-size:27px}
+  .ri-eyebrow{font-size:11px}
+  .ri-hero-ctas{flex-direction:column}
+  .ri-hero-ctas .ri-btn-lg{width:100%;justify-content:center}
+  .ri-section-head h2{font-size:26px}
+  .ri-contact-cta{flex-direction:column;align-items:flex-start}
+  #back-to-site{font-size:0;padding:10px;gap:0}
+  #back-to-site svg{width:17px;height:17px}
+}
 </style>
 </head>
 <body>
 
 <!-- ==================== NOTIFICATION ==================== -->
 <div id="notif" class="notif"></div>
+
+<!-- ==================================================================
+     WEBSITE — PRAKTIK MANDIRI BIDAN RINI
+     ================================================================== -->
+<div id="site">
+
+<nav class="ri-nav">
+  <div class="wrap">
+    <div class="ri-brand"><span class="dot"></span>Bidan Rini</div>
+    <div class="ri-links">
+      <a href="#layanan">Layanan</a>
+      <a href="#tentang">Tentang</a>
+      <a href="#kontak">Kontak</a>
+    </div>
+    <div class="ri-cta">
+      <a class="ri-wa-btn desktop-only" href="https://wa.me/6280000000000" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.33A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.6 0-3.1-.43-4.4-1.18l-.31-.19-3.02.79.8-2.94-.2-.32A7.94 7.94 0 014 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8z"/></svg>
+        Buat Jadwal
+      </a>
+      <button class="ri-login-btn" onclick="bukaApp()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+        Login
+      </button>
+      <button class="ri-burger" onclick="document.getElementById('ri-mobile').classList.toggle('open')" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="ri-mobile-panel" id="ri-mobile">
+    <a href="#layanan" onclick="this.parentElement.classList.remove('open')">Layanan</a>
+    <a href="#tentang" onclick="this.parentElement.classList.remove('open')">Tentang</a>
+    <a href="#kontak" onclick="this.parentElement.classList.remove('open')">Kontak</a>
+    <a href="https://wa.me/6280000000000" target="_blank" rel="noopener">Buat Jadwal via WhatsApp</a>
+    <button onclick="bukaApp()">Login ke Sistem</button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="ri-hero">
+  <div class="wrap">
+    <div>
+      <span class="ri-eyebrow">Praktik Mandiri Bidan Rini</span>
+      <h1>Menemani setiap tahap tumbuh kembang, <em>dengan hati.</em></h1>
+      <p class="lead">Layanan kebidanan mandiri yang mendampingi ibu sejak masa hamil, persalinan, hingga tumbuh kembang anak — dengan pemeriksaan yang telaten dan pencatatan kesehatan yang rapi.</p>
+      <div class="ri-hero-ctas">
+        <a class="ri-wa-btn ri-btn-lg" href="https://wa.me/6280000000000" target="_blank" rel="noopener">Buat Jadwal Periksa</a>
+        <button class="ri-login-btn ri-btn-lg" onclick="bukaApp()">Masuk ke Sistem Klinik</button>
+      </div>
+      <div class="ri-hero-badges">
+        <div class="ri-badge"><b>ANC</b><span>Periksa Hamil</span></div>
+        <div class="ri-badge"><b>Persalinan</b><span>Normal & Dampingan</span></div>
+        <div class="ri-badge"><b>KB</b><span>Semua Metode</span></div>
+        <div class="ri-badge"><b>Imunisasi</b><span>Bayi & Anak</span></div>
+      </div>
+    </div>
+    <div class="ri-curve-wrap">
+      <svg class="ri-curve-svg" viewBox="0 0 420 380" xmlns="http://www.w3.org/2000/svg">
+        <path class="ri-curve-path" d="M20 320 C 90 330, 120 250, 160 220 C 210 182, 220 120, 270 90 C 310 66, 330 60, 400 40"/>
+        <g>
+          <circle class="ri-curve-dot" cx="20" cy="320" r="6" fill="var(--ri-clay)" style="animation-delay:.4s"/>
+          <text class="ri-curve-label-b" x="34" y="316">Hamil</text>
+          <text class="ri-curve-label" x="34" y="330">Pemeriksaan ANC rutin</text>
+
+          <circle class="ri-curve-dot" cx="160" cy="220" r="6" fill="var(--ri-clay)" style="animation-delay:1s"/>
+          <text class="ri-curve-label-b" x="174" y="216">Bersalin</text>
+          <text class="ri-curve-label" x="174" y="230">Pendampingan proses lahir</text>
+
+          <circle class="ri-curve-dot" cx="270" cy="90" r="6" fill="var(--ri-clay)" style="animation-delay:1.5s"/>
+          <text class="ri-curve-label-b" x="284" y="86">Nifas & KB</text>
+          <text class="ri-curve-label" x="284" y="100">Pemulihan & KB</text>
+
+          <circle class="ri-curve-dot" cx="400" cy="40" r="6" fill="var(--ri-clay)" style="animation-delay:2s"/>
+          <text class="ri-curve-label-b" x="330" y="26">Imunisasi</text>
+          <text class="ri-curve-label" x="330" y="55">Tumbuh kembang anak</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<!-- ===== LAYANAN ===== -->
+<section class="ri-section" id="layanan">
+  <div class="wrap">
+    <div class="ri-section-head">
+      <span class="ri-kicker">Layanan</span>
+      <h2>Satu perjalanan, didampingi dari awal sampai akhir.</h2>
+    </div>
+    <div class="ri-services">
+      <div class="ri-service-row">
+        <div class="ri-service-stage">01 — Hamil</div>
+        <div class="ri-service-body">
+          <h3>Pemeriksaan Kehamilan (ANC)</h3>
+          <p>Pemeriksaan rutin kandungan setiap bulan: tekanan darah, berat badan, posisi janin, dan konsultasi keluhan selama hamil.</p>
+          <div class="ri-service-tags"><span class="ri-tag">Cek kandungan</span><span class="ri-tag">Buku KIA</span><span class="ri-tag">Konsultasi gizi ibu hamil</span></div>
+        </div>
+      </div>
+      <div class="ri-service-row">
+        <div class="ri-service-stage">02 — Bersalin</div>
+        <div class="ri-service-body">
+          <h3>Persalinan Normal</h3>
+          <p>Pendampingan proses persalinan dengan pemantauan ketat, siap merujuk ke fasilitas yang lebih lengkap bila diperlukan.</p>
+          <div class="ri-service-tags"><span class="ri-tag">Persalinan normal</span><span class="ri-tag">Perawatan nifas</span></div>
+        </div>
+      </div>
+      <div class="ri-service-row">
+        <div class="ri-service-stage">03 — Keluarga</div>
+        <div class="ri-service-body">
+          <h3>Keluarga Berencana (KB)</h3>
+          <p>Konsultasi dan pemasangan KB — suntik, pil, IUD, implan — disesuaikan dengan kondisi dan kenyamanan masing-masing ibu.</p>
+          <div class="ri-service-tags"><span class="ri-tag">Suntik & Pil</span><span class="ri-tag">IUD & Implan</span></div>
+        </div>
+      </div>
+      <div class="ri-service-row">
+        <div class="ri-service-stage">04 — Anak</div>
+        <div class="ri-service-body">
+          <h3>Imunisasi Bayi & Anak</h3>
+          <p>Imunisasi dasar lengkap sesuai jadwal Kemenkes, disertai pemantauan tumbuh kembang dan pencatatan riwayat kesehatan anak.</p>
+          <div class="ri-service-tags"><span class="ri-tag">Imunisasi dasar</span><span class="ri-tag">Pantau tumbuh kembang</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TENTANG ===== -->
+<section class="ri-section" id="tentang">
+  <div class="ri-about">
+    <div class="wrap">
+      <div class="ri-avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M12 2a5 5 0 015 5c0 2.5-2 4-2 6v1H9v-1c0-2-2-3.5-2-6a5 5 0 015-5z"/><path d="M9 14v2a3 3 0 003 3 3 3 0 003-3v-2"/><path d="M5 21c1.5-2.5 4-4 7-4s5.5 1.5 7 4"/></svg>
+      </div>
+      <div>
+        <span class="ri-kicker" style="color:var(--ri-blush)">Tentang</span>
+        <h2>Bidan Rini</h2>
+        <p>Menjalankan praktik mandiri kebidanan dengan pendekatan yang telaten dan komunikatif — memastikan setiap ibu memahami kondisi kandungan dan tumbuh kembang anaknya di setiap kunjungan.</p>
+        <div class="ri-cred-list">
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg> Bidan terdaftar, STR aktif</div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg> Melayani ANC, persalinan, nifas, KB & imunisasi</div>
+          <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg> Pencatatan riwayat kesehatan tiap pasien secara digital</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== KONTAK ===== -->
+<section class="ri-section" id="kontak">
+  <div class="wrap">
+    <div class="ri-section-head">
+      <span class="ri-kicker">Kontak</span>
+      <h2>Buat jadwal, atau datang langsung.</h2>
+    </div>
+    <div class="ri-contact-grid">
+      <div class="ri-info-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <h4>Alamat</h4>
+        <p>Jl. Melati No.12, Bandung</p>
+      </div>
+      <div class="ri-info-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <h4>Jam Praktik</h4>
+        <p>Setiap hari, 08.00–20.00 WIB</p>
+      </div>
+      <div class="ri-contact-cta">
+        <div>
+          <h3>Ada yang ingin ditanyakan?</h3>
+          <p>Chat langsung untuk buat jadwal periksa atau konsultasi.</p>
+        </div>
+        <a class="ri-wa-btn" style="background:#fff;color:var(--ri-clay)!important" href="https://wa.me/6280000000000" target="_blank" rel="noopener">Chat via WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="ri-footer">
+  <div class="wrap">
+    <p>© 2026 Praktik Mandiri Bidan Rini.</p>
+    <p>Sistem manajemen klinik oleh RIDEV.ID</p>
+  </div>
+</footer>
+
+</div><!-- /#site -->
+
+<!-- ==================== APP ROOT (aplikasi klinik, tersembunyi sampai user klik Login) ==================== -->
+<div id="app-root" style="display:none">
+<button id="back-to-site" onclick="tutupApp()" aria-label="Kembali ke website">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg>
+  Kembali ke Website
+</button>
 
 <!-- ==================== LOGIN ==================== -->
 <div id="login-screen">
@@ -225,7 +539,7 @@ tr:hover td{background:#fafafa}
         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
       </div>
       <div>
-        <div class="llogo-t">Klinik <span id="display-nama-owner-login">Bidan Sehat</span></div>
+        <div class="llogo-t"><span id="display-nama-owner-login">Praktik Bidan Rini</span></div>
         <div class="llogo-s">Sistem Manajemen Klinik</div>
       </div>
     </div>
@@ -275,7 +589,7 @@ tr:hover td{background:#fafafa}
     <div class="sb-head">
       <div class="sb-logo-row">
         <div class="sb-licon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
-        <div><div class="sb-lt">Klinik Bidan<br>Sehat</div></div>
+        <div><div class="sb-lt">Praktik Bidan<br>Rini</div></div>
       </div>
       <div class="sb-ls" id="sb-sub">v2.0 Online</div>
     </div>
@@ -542,7 +856,20 @@ tr:hover td{background:#fafafa}
   </div>
 </div>
 
+</div><!-- /#app-root -->
+
 <script>
+// ==== Toggle antara Website & Aplikasi Sistem Klinik ====
+function bukaApp(){
+  document.getElementById('site').style.display='none';
+  document.getElementById('app-root').style.display='block';
+  window.scrollTo(0,0);
+}
+function tutupApp(){
+  document.getElementById('app-root').style.display='none';
+  document.getElementById('site').style.display='block';
+  window.scrollTo(0,0);
+}
 
 // --- TARUH DI SINI (SEBELUM KODE LAIN) ---
 function getMasaAktifOwner() {
@@ -703,7 +1030,7 @@ function defaultUsers() {
 
 function defaultDB() {
   return {
-    info:{nama:'Klinik Bidan Sehat',alamat:'Jl. Kesehatan No.1, Kota Sehat',telp:'(021) 1234-5678',tagline:'Praktik Kebidanan Bersertifikat'},
+    info:{nama:'Praktik Mandiri Bidan Rini',alamat:'Jl. Melati No.12, Bandung',telp:'(022) 8765-4321',tagline:'Praktik Kebidanan Bersertifikat'},
     // Pastikan daftar hargaTindakan ditulis seperti ini
     hargaTindakan: [
       {id: 1, nama: 'ANC (Kehamilan)', harga: 50000, jasa: 10000},
